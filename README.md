@@ -1,4 +1,27 @@
-# jee-project
-University project for JEE. Based on Spring.
+<h1 align="center">
+Codehub
+</h1>
 
-[Spring Boot Initialzr](https://start.spring.io/#!type=maven-project&language=java&platformVersion=3.0.2&packaging=jar&jvmVersion=17&groupId=dev.osmocode&artifactId=codehub&name=codehub&description=Spring%20Boot%20project%20for%20osmocode%20social%20network.&packageName=dev.osmocode.codehub&dependencies=devtools,web,security,thymeleaf,data-jpa,validation,h2)
+<p align="center">
+StackOverFlow like application for University, JEE project.
+</p>
+
+## ☀️ License
+
+[MIT License](https://github.com/osmocode/jee-project/blob/main/LICENSE)
+
+## 🖥 Prerequisites
+
+In order to run the project you'll need the following tools installed
+
+* [Java 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
+* [Maven 3.8.6](https://maven.apache.org/download.cgi)
+
+## ⌨️ Development
+
+```bash
+$ git clone https://github.com/osmocode/jee-project.git
+$ cd jee-project
+$ ./bin/install.sh
+$ ./bin/start.sh
+```
