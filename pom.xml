@@ -77,13 +77,26 @@
 				<version>3.1.0</version>
 				<executions>
 					<execution>
-                        <id>tailwind-compiler</id>
-						<phase>compile</phase>
+                        <id>tailwind-build</id>
+						<phase>install</phase>
 						<goals>
 							<goal>exec</goal>
 						</goals>
 						<configuration>
-							<async>true</async>
+							<executable>npm</executable>
+							<workingDirectory>./</workingDirectory>
+							<arguments>
+								<argument>run</argument>
+								<argument>build:dev</argument>
+							</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<id>tailwind-dev</id>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
 							<executable>npm</executable>
 							<workingDirectory>./</workingDirectory>
 							<arguments>
