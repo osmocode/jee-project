@@ -3,9 +3,13 @@
   "version": "1.0.0",
   "description": "University project for JEE. Based on Spring.",
   "scripts": {
-    "build:dev": "npx tailwind -i styles/main.css -o src/main/resources/static/css/tailwind/main.css",
-    "watch:dev": "npx tailwind -i styles/main.css -o src/main/resources/static/css/tailwind/main.css --watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "postinstall": "npm run build",
+    "build": "npm run build:js & npm run build:style",
+    "build:js": "rollup -c config/rollup.config.js --bundleConfigAsCjs",
+    "build:style": "postcss --config config/postcss.config.js styles/main.css -o src/main/resources/static/dist/style.css",
+    "watch": "npm run watch:js & npm run watch:style",
+    "watch:js": "rollup -c config/rollup.config.js --bundleConfigAsCjs --watch",
+    "watch:style": "postcss --config config/postcss.config.js styles/main.css -o src/main/resources/static/dist/style.css --watch"
   },
   "repository": {
     "type": "git",
@@ -19,6 +23,12 @@
   },
   "homepage": "https://github.com/osmocode/jee-project#readme",
   "devDependencies": {
-    "tailwindcss": "^3.2.4"
+    "@hotwired/turbo": "^7.2.5",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "autoprefixer": "^10.4.13",
+    "postcss": "^8.4.21",
+    "postcss-cli": "^10.1.0",
+    "rollup": "^3.16.0",
+    "tailwindcss": "^3.2.7"
   }
 }

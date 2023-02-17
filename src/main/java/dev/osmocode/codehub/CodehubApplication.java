@@ -11,7 +11,3 @@ public class CodehubApplication {
 	}
 
 }
-
-// https://maciejwalkowiak.com/blog/spring-boot-thymeleaf-tailwindcss/
-
-// https://www.mojohaus.org/exec-maven-plugin/usage.html
