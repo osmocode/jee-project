@@ -77,6 +77,30 @@
 				<version>3.1.0</version>
 				<executions>
 					<execution>
+						<id>webpack</id>
+						<phase>generate-resources</phase>
+						<goals>
+                            <goal>exec</goal>
+                        </goals>
+						<configuration>
+							<async>true</async>
+							<executable>npm</executable>
+							<workingDirectory>./</workingDirectory>
+							<arguments>
+								<argument>run</argument>
+								<argument>watch</argument>
+							</arguments>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<!--
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>3.1.0</version>
+				<executions>
+					<execution>
                         <id>tailwind-build</id>
 						<phase>install</phase>
 						<goals>
@@ -107,6 +131,7 @@
 					</execution>
 				</executions>
 			</plugin>
+			-->
 		</plugins>
 	</build>
 
