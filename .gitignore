@@ -38,4 +38,4 @@ package-lock.json
 
 ### Custom for project ###
 .DS_Store
-src/main/resources/static/css/tailwind/
+src/main/resources/static/dist/
