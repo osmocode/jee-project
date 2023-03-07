@@ -4,11 +4,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class PrivateController {
+public class DashboardController {
 
-    @GetMapping("/private")
-    public String getPrivate() {
-        return "private";
+    @GetMapping("/dashboard")
+    public String getTemplate() {
+        return "dashboard";
     }
 
 }

@@ -4,11 +4,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class TemplateController {
+public class AdminController {
 
-    @GetMapping("/template")
-    public String getTemplate() {
-        return "template";
+    @GetMapping("/admin")
+    public String getPrivate() {
+        return "admin";
     }
 
 }
