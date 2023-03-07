@@ -14,8 +14,8 @@ StackOverFlow like application for University, JEE project.
 
 In order to run the project you'll need the following tools installed
 
+<!-- * [Maven 3.8.6](https://maven.apache.org/download.cgi) -->
 * [Java 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
-* [Maven 3.8.6](https://maven.apache.org/download.cgi)
 * [Node.js](https://nodejs.org/en/download/)
 * [Npm](https://docs.npmjs.com/cli/v8/configuring-npm/install?v=true)
 

@@ -70,6 +70,11 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<image>
+						<name>docker.io/osmocode/${project.artifactId}:${project.version}</name>
+					</image>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -77,8 +82,8 @@
 				<version>3.1.0</version>
 				<executions>
 					<execution>
-						<id>webpack</id>
-						<phase>generate-resources</phase>
+						<id>webpack-watch</id>
+						<!--<phase>generate-resources</phase>-->
 						<goals>
                             <goal>exec</goal>
                         </goals>
@@ -92,17 +97,9 @@
 							</arguments>
 						</configuration>
 					</execution>
-				</executions>
-			</plugin>
-			<!--
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>3.1.0</version>
-				<executions>
 					<execution>
-                        <id>tailwind-build</id>
-						<phase>install</phase>
+						<id>webpack-build</id>
+						<phase>prepare-package</phase>
 						<goals>
 							<goal>exec</goal>
 						</goals>
@@ -111,27 +108,12 @@
 							<workingDirectory>./</workingDirectory>
 							<arguments>
 								<argument>run</argument>
-								<argument>build:dev</argument>
-							</arguments>
-						</configuration>
-					</execution>
-					<execution>
-						<id>tailwind-dev</id>
-						<goals>
-							<goal>exec</goal>
-						</goals>
-						<configuration>
-							<executable>npm</executable>
-							<workingDirectory>./</workingDirectory>
-							<arguments>
-								<argument>run</argument>
-								<argument>watch:dev</argument>
+								<argument>build</argument>
 							</arguments>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
-			-->
 		</plugins>
 	</build>
 

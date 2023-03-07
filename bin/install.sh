@@ -21,8 +21,11 @@ if ! hash java 2> /dev/null; then
 fi
 echo "java:$Green OK !$Reset"
 
+# Check if wrapper present
+if [[ ! -d .mvn ]]; then
+    echo "maven:$Red ERROR - Maven wrapper is missing.$Reset" >&2
 # Check if maven is installed
-if ! hash mvn 2> /dev/null; then
+elif ! hash mvn 2> /dev/null; then
     echo "maven:$Red ERROR - Maven must be installed (see: https://maven.apache.org/download.cgi).$Reset" >&2
     exit 1
 fi
@@ -51,7 +54,7 @@ if [ $? -ne 0 ]; then
 fi
 echo -e "npm install:$Green SUCCEED !$Reset"
 
-mvn clean install >/dev/null 2>/dev/null
+./mvnw clean install >/dev/null 2>/dev/null
 if [ $? -ne 0 ]; then
     echo "mvn install:$Red ERROR - Install failed please contact admin system...$Reset" >&2
     exit 1

@@ -1,11 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Template page</title>
-    <link rel="stylesheet" th:href="@{/css/tailwind/main.css}" />
-</head>
-<body>
-  <h1>Hello World</h1>
-</body>
+    <head th:insert="~{fragments/head :: head}"></head>
+    <body class="h-full">
+        <h1>Welcome to private page</h1>
+        <a href="/home">Back</a>
+    </body>
 </html>
