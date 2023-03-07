@@ -33,6 +33,7 @@ public class SecurityConfig {
                             "/error",
                             "/favicon.ico",
                             "/console",
+                            "/dist/**",
                             "/home"
                     ).permitAll();
                     // ADMIN ROUTE
@@ -42,7 +43,13 @@ public class SecurityConfig {
                     // OTHER ROUTE ARE SECURED BY DEFAULT
                     requests.anyRequest().authenticated();
                 })
-                .formLogin(Customizer.withDefaults())
+                .formLogin( form ->
+                        form
+                                .loginPage("/login")
+                                .defaultSuccessUrl("/dashboard")
+                                .failureUrl("/login?error")
+                                .permitAll()
+                )
                 .logout(Customizer.withDefaults());
         return http.build();
     }
