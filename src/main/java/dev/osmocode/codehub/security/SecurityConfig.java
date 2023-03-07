@@ -23,6 +23,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChainDev(HttpSecurity http) throws Exception {
         http.csrf().disable();
+        http.headers().frameOptions().disable();
         http
                 .authorizeHttpRequests(requests -> {
                     // PUBLIC ROUTE
@@ -31,6 +32,7 @@ public class SecurityConfig {
                             "/index",
                             "/error",
                             "/favicon.ico",
+                            "/console",
                             "/home"
                     ).permitAll();
                     // ADMIN ROUTE
