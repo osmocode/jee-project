@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+<ul th:object="${userDto}">
+    <li th:text="${userDto.username()}"></li>
+    <li th:text="${userDto.email()}"></li>
+    <li th:text="${userDto.description()}"></li>
+    <li th:text="${userDto.since()}"></li>
+    <li th:text="${userDto.followers()}"></li>
+    <li th:text="${userDto.following()}"></li>
+    <li th:text="${userDto.reviews()}"></li>
+    <li th:text="${userDto.grade()}"></li>
+</ul>
+
+</body>
+</html>
