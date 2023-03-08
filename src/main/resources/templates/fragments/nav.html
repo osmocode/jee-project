@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <nav class="mx-auto flex max-w-7xl items-center justify-between gap-x-6 p-6 lg:px-8" th:fragment="nav">
+        <div class="flex lg:flex-1 gap-x-6">
+            <a href="/" class="-m-1.5 p-1.5">
+                <span class="sr-only">Osmocode</span>
+                <img class="h-8 w-auto" th:src="@{images/osmocode-logo.png}" alt="Osmocode">
+            </a>
+            <button type="button" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 gap-x-3">
+                <span class="sr-only">Search</span>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                </svg>
+                <span class="text-sm leading-6 text-gray-900">Search</span>
+            </button>
+        </div>
+        <div class="hidden lg:flex lg:gap-x-12">
+            <a href="/dashboard" class="text-sm font-semibold leading-6 text-gray-900">Dashboard</a>
+            <a href="/questions" class="text-sm font-semibold leading-6 text-gray-900">Questions</a>
+        </div>
+        <div class="flex flex-1 items-center justify-end gap-x-6">
+            <a href="/login" class="hidden lg:block lg:text-sm lg:font-semibold lg:leading-6 lg:text-gray-900" sec:authorize="isAnonymous()">Log in</a>
+            <a href="#" class="rounded-md bg-gray-800 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-gray-600" sec:authorize="isAnonymous()">Sign up</a>
+            <a href="/logout" class="hidden lg:block lg:text-sm lg:font-semibold lg:leading-6 lg:text-gray-900" sec:authorize="isFullyAuthenticated()">Log out</a>
+        </div>
+        <div class="flex lg:hidden">
+            <button type="button" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700">
+                <span class="sr-only">Open main menu</span>
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
+            </button>
+        </div>
+    </nav>
+</html>

@@ -1,8 +1,0 @@
-<svg 
- xmlns="http://www.w3.org/2000/svg"
- xmlns:xlink="http://www.w3.org/1999/xlink"
- width="1000" height="1000">
-<path fill-rule="evenodd"  fill="rgb(44, 62, 80)"
- d="M500.000,-0.000 C776.142,-0.000 1000.000,223.858 1000.000,500.000 L1000.000,990.000 C1000.000,995.523 995.523,1000.000 990.000,1000.000 L500.000,1000.000 C223.858,1000.000 -0.000,776.142 -0.000,500.000 C-0.000,223.858 223.858,-0.000 500.000,-0.000 Z"/>
-<text font-family='Myriad Pro' font-size='250' x='390' y='925'><tspan font-family='Helvetica Neue' fill='#FFF'>SMO</tspan></text>
-</svg>

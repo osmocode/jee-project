@@ -7,7 +7,6 @@ import dev.osmocode.codehub.service.AuthorityService;
 import dev.osmocode.codehub.utils.Role;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -34,6 +33,7 @@ public class SecurityConfig {
                             "/favicon.ico",
                             "/console",
                             "/dist/**",
+                            "/images/**",
                             "/home"
                     ).permitAll();
                     // ADMIN ROUTE
@@ -50,7 +50,8 @@ public class SecurityConfig {
                                 .failureUrl("/login?error")
                                 .permitAll()
                 )
-                .logout(Customizer.withDefaults());
+                .logout(form ->
+                        form.logoutSuccessUrl("/"));
         return http.build();
     }
 
