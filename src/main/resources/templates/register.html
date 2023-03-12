@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<body>
+<div class="container">
+    <form method="post" th:action="@{/register}" th:object="${registrationDto}">
+        <h2>Please register</h2>
+        <p>Create a user account</p>
+        <div th:if="${usernameExists}">
+            An account with this username already exists.
+        </div>
+        <div th:if="${emailExists}">
+            An account with this email already exists.
+        </div>
+        <p>
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" th:field="*{username}" placeholder="Username" required
+                   autofocus/>
+        <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username Error</div>
+        </p>
+
+        <p>
+            <label for="email">Email</label>
+            <input type="text" id="email" name="email" th:field="*{email}" placeholder="Email">
+        </p>
+        <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</div>
+        <p>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" th:field="*{password}" placeholder="Password" required>
+        <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</div>
+        </p>
+        <p>
+            <label for="confirmation">Password confirmation</label>
+            <input type="password" id="confirmation" name="confirmation" th:field="*{confirmation}"
+                   placeholder="Confirme password" required>
+        </p>
+        <div th:if="${confirmationError}">
+            Password and confirmation are not the same.
+        </div>
+        <button type="submit">Register now</button>
+    </form>
+</div>
+</body>
+</html>
