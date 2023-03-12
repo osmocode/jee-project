@@ -2,12 +2,11 @@ package dev.osmocode.codehub.entity;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Entity(name = "users")
 public class User {
@@ -22,43 +21,52 @@ public class User {
     private String username;
 
     @NotNull
-//    @Size(max = 50, message = "Password should have at most 50 characters")
     private String password;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER) //TODO: LAZY
     @JoinColumn(name = "authority_id")
     private Authority authority;
 
-    @Pattern(regexp = "^(.+)@(\\S+)$", message = "Wrong email format")
+    @Column(unique = true)
+    @Email(message = "Wrong email format")
     private String email;
 
     @Size(max = 190, message = "Description should have at most 190 characters")
-    private String description;
+    private String about;
 
     @NotNull
     private Long since;
 
     @ManyToMany(
-            fetch = FetchType.EAGER
+            fetch = FetchType.EAGER //TODO: LAZY
     )
     @JoinTable(
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "follower_id")
+
     )
-    private List<User> follower;
+    private List<User> followers;
 
     @ManyToMany(
-            fetch = FetchType.EAGER,
-            mappedBy = "follower"
+            fetch = FetchType.EAGER, //TODO: LAZY
+            mappedBy = "followers" //TODO: think about this
     )
-    private List<User> following;
+    private List<User> followings;
 
     @OneToMany(
-            fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER, //TODO: LAZY
+            mappedBy = "target"
+    )
+    private List<UserScore> attributedScores;
+
+
+    @OneToMany(
+            fetch = FetchType.EAGER, //TODO: LAZY
             mappedBy = "assigner"
     )
-    private List<Score> score;
+    private List<UserScore> distributedScore;
+
+    /* constructors */
 
     public User() {
     }
@@ -69,10 +77,11 @@ public class User {
         this.email = user.email;
         this.authority = user.authority;
         this.since = user.since;
-        this.follower = user.follower;
-        this.following = user.following;
-        this.description = user.description;
-        this.score = user.score;
+        this.followers = user.followers;
+        this.followings = user.followings;
+        this.about = user.about;
+        this.attributedScores = new ArrayList<>();
+        this.distributedScore = new ArrayList<>();
     }
 
     public User(String username, String password, String email, Authority authority) {
@@ -81,11 +90,34 @@ public class User {
         this.email = email;
         this.authority = authority;
         this.since = System.currentTimeMillis();
-        this.follower = new ArrayList<>();
-        this.following = new ArrayList<>();
-        this.description = "";
-        this.score = new ArrayList<>();
+        this.followers = new ArrayList<>();
+        this.followings = new ArrayList<>();
+        this.about = "";
+        this.attributedScores = new ArrayList<>();
+        this.distributedScore = new ArrayList<>();
     }
+
+    /* social */
+
+    public void follow(User following) {
+        this.followings.add(following);
+        following.addFollower(this);
+    }
+
+    private void addFollower(User follower) {
+        this.followers.add(follower);
+    }
+
+    public void unfollow(User following) {
+        this.followings.remove(following);
+        following.removeFollower(this);
+    }
+
+    private void removeFollower(User follower) {
+        this.followers.remove(follower);
+    }
+
+    /* getters and setters */
 
     public Long getId() {
         return id;
@@ -127,12 +159,12 @@ public class User {
         this.email = email;
     }
 
-    public String getDescription() {
-        return description;
+    public String getAbout() {
+        return about;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setAbout(String about) {
+        this.about = about;
     }
 
     public Long getSince() {
@@ -143,27 +175,35 @@ public class User {
         this.since = since;
     }
 
-    public List<User> getFollower() {
-        return follower;
+    public List<User> getFollowers() {
+        return followers;
     }
 
-    public void setFollower(List<User> follower) {
-        this.follower = follower;
+    public void setFollowers(List<User> followers) {
+        this.followers = followers;
     }
 
-    public List<User> getFollowing() {
-        return following;
+    public List<User> getFollowings() {
+        return followings;
     }
 
-    public void setFollowing(List<User> following) {
-        this.following = following;
+    public void setFollowings(List<User> followings) {
+        this.followings = followings;
     }
 
-    public List<Score> getScore() {
-        return score;
+    public List<UserScore> getAttributedScores() {
+        return attributedScores;
     }
 
-    public void setScore(List<Score> score) {
-        this.score = score;
+    public void setAttributedScores(List<UserScore> attributedScores) {
+        this.attributedScores = attributedScores;
+    }
+
+    public List<UserScore> getDistributedScore() {
+        return distributedScore;
+    }
+
+    public void setDistributedScore(List<UserScore> distributedScore) {
+        this.distributedScore = distributedScore;
     }
 }
