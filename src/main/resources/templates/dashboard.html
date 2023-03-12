@@ -1,7 +1,35 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" class="h-full bg-gray-100">
-    <head th:replace="~{fragments/head :: head}"></head>
-    <body class="h-full">
-        <nav th:replace="~{fragments/nav :: nav}"></nav>
-    </body>
+<head th:replace="~{fragments/head :: head}"></head>
+<body class="h-full">
+<nav th:replace="~{fragments/nav :: nav}"></nav>
+<table>
+    <thead>
+    <tr>
+        <th scope="col">Username</th>
+        <th scope="col">Email</th>
+        <th scope="col">About</th>
+        <th scope="col">Since</th>
+        <th scope="col">Followers</th>
+        <th scope="col">Followings</th>
+        <th scope="col">Reviews</th>
+        <th scope="col">Grade</th>
+        <th scope="col">Profile</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${followings}">
+        <td th:text="${user.username()}"></td>
+        <td th:text="${user.email()}"></td>
+        <td th:text="${user.about()}"></td>
+        <td th:text="${user.since()}"></td>
+        <td th:text="${user.followers()}"></td>
+        <td th:text="${user.following()}"></td>
+        <td th:text="${user.reviews()}"></td>
+        <td th:text="${user.grade()}"></td>
+        <td><a th:href="@{/profile/{username} (username=${user.username()})}" th:text="'/profile/' + ${user.username()}"></a></td>
+    </tr>
+    </tbody>
+</table>
+</body>
 </html>
