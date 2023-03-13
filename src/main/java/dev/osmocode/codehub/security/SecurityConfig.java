@@ -34,7 +34,9 @@ public class SecurityConfig {
                             "/console",
                             "/dist/**",
                             "/images/**",
-                            "/home"
+                            "/home",
+                            "/profile/**",
+                            "/register"
                     ).permitAll();
                     // ADMIN ROUTE
                     requests.requestMatchers(
@@ -43,7 +45,7 @@ public class SecurityConfig {
                     // OTHER ROUTE ARE SECURED BY DEFAULT
                     requests.anyRequest().authenticated();
                 })
-                .formLogin( form ->
+                .formLogin(form ->
                         form
                                 .loginPage("/login")
                                 .defaultSuccessUrl("/dashboard")

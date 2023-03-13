@@ -14,7 +14,10 @@ public class Authority {
     @Column(unique = true)
     private String authority;
 
-    @OneToMany(mappedBy = "authority")
+    @OneToMany(
+            //TODO: fetch = FetchType.LAZY,
+            mappedBy = "authority"
+    )
     private Set<User> users;
 
     public Authority() {

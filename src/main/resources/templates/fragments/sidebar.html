@@ -7,7 +7,7 @@
         <div class="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col">
             <div class="flex flex-grow flex-col overflow-y-auto border-r border-gray-200 bg-white pt-5">
                 <div class="flex flex-shrink-0 items-center px-4">
-                    <img th:src="@{images/osmocode-logo.png}" alt="Osmocode logo" class="h-8 w-auto">
+                    <img th:src="@{/images/osmocode-logo.png}" alt="Osmocode logo" class="h-8 w-auto">
                 </div>
                 <div class="mt-5 flex flex-grow flex-col">
                     <nav th:replace="~{fragments/sidebar-nav :: sidebar-nav(${active})}"></nav>
@@ -15,7 +15,7 @@
             </div>
         </div>
         <!-- MOBILE SIDEBAR -->
-        <div class="relative z-40 lg:hidden" role="dialog" aria-modal="true">
+        <div class="relative z-40 lg:hidden hidden" role="dialog" aria-modal="true">
             <div class="fixed inset-0 bg-gray-600 bg-opacity-75"></div>
             <div class="fixed inset-0 z-40 flex">
                 <div class="relative flex w-full max-w-xs flex-1 flex-col bg-white pt-5 pb-4">
@@ -28,7 +28,7 @@
                         </button>
                     </div>
                     <div class="flex flex-shrink-0 items-center px-4">
-                        <img th:src="@{images/osmocode-logo.png}" alt="Osmocode logo" class="h-8 w-auto">
+                        <img th:src="@{/images/osmocode-logo.png}" alt="Osmocode logo" class="h-8 w-auto">
                     </div>
                     <div class="mt-5 h-0 flex-1 overflow-y-auto">
                         <nav th:replace="~{fragments/sidebar-nav :: sidebar-nav(active)}"></nav>

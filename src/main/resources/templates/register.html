@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en"
+      class="h-full"
+      xmlns:th="http://www.thymeleaf.org" xmlns:form="http://www.w3.org/1999/html">
+<head th:replace="~{fragments/head :: head}"></head>
+<body class="h-full">
+<div class="flex min-h-full">
+    <div class="flex flex-1 flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
+        <div class="mx-auto w-full max-w-sm lg:w-96">
+            <!-- REGISTER HEADER -->
+            <div>
+                <img th:src="@{images/osmocode-logo.png}" alt="Osmocode logo" class="h-12 w-auto">
+                <h2 class="mt-6 text-3xl font-bold tracking-tight text-gray-900">Register</h2>
+            </div>
+
+            <!-- REGISTER FORM -->
+            <div class="mt-6">
+                <form th:action="@{/register}" method="POST" th:object="${registrationDto}" class="space-y-6">
+
+                    <!-- USERNAME -->
+                    <div class="space-y-1">
+                        <label for="username" class="block text-sm font-medium leading-6 text-gray-900">Username</label>
+                        <div class="mt-2">
+                            <input id="username" name="username" type="text" required class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6">
+                        </div>
+                        <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="mt-2 text-sm text-red-600">Not a valid email username.</p>
+                        <p th:if="${usernameExists}" class="mt-2 text-sm text-red-600">An account with this username already exists.</p>
+                    </div>
+
+                    <!-- EMAIL -->
+                    <div class="space-y-1">
+                        <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email</label>
+                        <div class="mt-2">
+                            <input id="email" name="email" type="text" required class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6">
+                        </div>
+                        <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="mt-2 text-sm text-red-600">Not a valid email.</p>
+                        <p th:if="${emailExists}" class="mt-2 text-sm text-red-600">An account with this email already exists.</p>
+                    </div>
+
+                    <!-- PASSWORD -->
+                    <div class="space-y-1">
+                        <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Password</label>
+                        <div class="mt-2">
+                            <input id="password" name="password" type="password" autocomplete="current-password" required class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6">
+                        </div>
+                        <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="mt-2 text-sm text-red-600">Something wrong with your password.</p>
+                    </div>
+
+                    <!-- CONFIRM PASSWORD -->
+                    <div class="space-y-1">
+                        <label for="confirmation" class="block text-sm font-medium leading-6 text-gray-900">Confirm password</label>
+                        <div class="mt-2">
+                            <input id="confirmation" name="confirmation" type="password" required class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6">
+                        </div>
+                        <p th:if="${confirmationError}" class="mt-2 text-sm text-red-600">Password and confirmation are not the same.</p>
+                    </div>
+
+                    <div class="flex items-center justify-end">
+                        <p class="text-sm text-gray-600">
+                            Already have account?
+                            <a href="/login" class="font-medium text-sky-600 hover:text-sky-500">Sign in</a>
+                        </p>
+                    </div>
+
+                    <div>
+                        <button type="submit" class="flex w-full justify-center rounded-md bg-sky-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-sky-500 focus-visible:outline">Register</button>
+                    </div>
+                </form>
+                <script>
+                    document.querySelectorAll('form').forEach(function (el) {
+                        el.dataset.turbo = false
+                    })
+                </script>
+            </div>
+        </div>
+    </div>
+    <div class="relative hidden w-0 flex-1 lg:block">
+        <img class="absolute inset-0 h-full w-full object-cover" src="https://images.unsplash.com/photo-1668162456452-11e6ca7c8608?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2370&q=80" alt="">
+    </div>
+</div>
+</body>
+</html>

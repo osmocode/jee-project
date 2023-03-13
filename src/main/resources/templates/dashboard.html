@@ -5,7 +5,8 @@
     <head th:replace="~{fragments/head :: head}"></head>
     <body class="h-full">
         <aside th:replace="~{fragments/sidebar :: sidebar('Feed')}"></aside>
-        <nav th:replace="~{fragments/nav :: nav}"></nav>
-
+        <div class="flex flex-1 flex-col lg:pl-64">
+            <nav th:replace="~{fragments/nav :: nav}"></nav>
+        </div>
     </body>
 </html>
