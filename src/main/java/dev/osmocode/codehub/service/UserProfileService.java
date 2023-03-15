@@ -6,10 +6,11 @@ import dev.osmocode.codehub.entity.User;
 import dev.osmocode.codehub.repository.UserRepository;
 import dev.osmocode.codehub.utils.SinceFormater;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class UserProfileService {
@@ -32,11 +33,8 @@ public class UserProfileService {
     }
 
     @Transactional
-    public List<UserSummaryDto> findUserByUsernameFetchingFollowings(String username) {
-        var user = repository.findUserByUsernameFetchingFollowings(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        return user.getFollowings()
-                .stream()
-                .map(UserSummaryDto::buildFrom)
-                .toList();
+    public Page<UserSummaryDto> findUserByUsernameFetchingFollowings(String username, int offset, int limit) {
+        var user = repository.findUserByFollowersUsername(username, PageRequest.of(offset, limit, Sort.by("id").ascending()));
+        return user.map(UserSummaryDto::buildFrom);
     }
 }

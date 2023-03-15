@@ -15,7 +15,6 @@ public record UserProfileDto(
         int reviews, // nb note
         double grade // average note
 ) {
-
     public static UserProfileDto buildFrom(User user, SinceFormater sinceFormater) {
         double grade = user.getAttributedScores().stream().mapToInt(UserScore::getNote).average().orElse(0.0);
         grade = grade * 100;

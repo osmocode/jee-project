@@ -54,7 +54,7 @@ public class User {
 
     @ManyToMany(
             fetch = FetchType.LAZY,
-            mappedBy = "followers" //TODO: think about this
+            mappedBy = "followers"
     )
     private Set<User> followings;
 
@@ -200,7 +200,7 @@ public class User {
     public void setFollowings(Set<User> followings) {
         this.followings = followings;
     }
-    
+
     public Set<UserScore> getAttributedScores() {
         return attributedScores;
     }
