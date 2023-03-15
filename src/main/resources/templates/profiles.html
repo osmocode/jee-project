@@ -6,30 +6,60 @@
 <table>
     <thead>
     <tr>
+        <th scope="col">Profile picture</th>
         <th scope="col">Username</th>
-        <th scope="col">Email</th>
-        <th scope="col">About</th>
-        <th scope="col">Since</th>
-        <th scope="col">Followers</th>
-        <th scope="col">Followings</th>
-        <th scope="col">Reviews</th>
-        <th scope="col">Grade</th>
-        <th scope="col">Profile</th>
+        <!--        <th scope="col">Email</th>-->
+        <!--        <th scope="col">About</th>-->
+        <!--        <th scope="col">Since</th>-->
+        <!--        <th scope="col">Followers</th>-->
+        <!--        <th scope="col">Followings</th>-->
+        <!--        <th scope="col">Reviews</th>-->
+        <!--        <th scope="col">Grade</th>-->
+        <th scope="col">Link to profile</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="user : ${users}">
+    <tr th:each="user : ${profilesPage}">
+        <td><img src="https://cdn1.iconfinder.com/data/icons/dashboard-ui-vol-1-glyph/48/Sed-03-512.png" width="96"
+                 height="96"></td>
         <td th:text="${user.username()}"></td>
-        <td th:text="${user.email()}"></td>
-        <td th:text="${user.about()}"></td>
-        <td th:text="${user.since()}"></td>
-        <td th:text="${user.followers()}"></td>
-        <td th:text="${user.following()}"></td>
-        <td th:text="${user.reviews()}"></td>
-        <td th:text="${user.grade()}"></td>
-        <td><a th:href="@{/profile/{username} (username=${user.username()})}" th:text="'/profile/' + ${user.username()}"></a></td>
+        <td><a th:href="@{/profile/{username} (username=${user.username()})}"
+               th:text="'/profile/' + ${user.username()}"></a></td>
     </tr>
     </tbody>
 </table>
+
+
+<nav aria-label="Page navigation row justify-content-between">
+    <ul class="pagination col-4">
+        <li class="page-item" th:if="${profilesPage.number != 0}">
+            <a class="page-link"
+               th:href="@{/profiles?offset={offset}&limit={limit}(offset=${profilesPage.number - 1}, limit=${profilesPage.size})}"
+               tabindex="-1" aria-disabled="true">Précédent</a>
+        </li>
+        <li class="page-item" th:each="pageNumber : ${#numbers.sequence(0, profilesPage.totalPages - 1)}"
+            th:classappend="${profilesPage.number == pageNumber} ? active">
+            <a class="page-link"
+               th:href="@{/profiles?offset={offset}&limit={limit}(offset=${pageNumber}, limit=${profilesPage.size})}"
+               th:text="${pageNumber + 1}"></a>
+        </li>
+        <li class="page-item" th:if="${profilesPage.number != profilesPage.totalPages - 1}">
+            <a class="page-link"
+               th:href="@{/profiles?offset={offset}&limit={limit}(offset=${profilesPage.number + 1}, limit=${profilesPage.size})}">Suivant</a>
+        </li>
+    </ul>
+    <div class="col-4">
+        <a class="btn btn-default"
+           th:href="@{/profiles?offset={offset}&limit={limit}(offset=0, limit=15)}"
+           th:classappend="${profilesPage.size==15} ? active">15</a>
+        <a class="btn btn-default"
+           th:href="@{/profiles?offset={offset}&limit={limit}(offset=0, limit=30)}"
+           th:classappend="${profilesPage.size==30} ? active">30</a>
+        <a class="btn btn-default"
+           th:href="@{/profiles?offset={offset}&limit={limit}(offset=0, limit=50)}"
+           th:classappend="${profilesPage.size==50} ? active">50</a>
+        per page
+    </div>
+</nav>
 </body>
 </html>

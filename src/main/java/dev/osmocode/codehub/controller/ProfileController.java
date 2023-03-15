@@ -1,20 +1,25 @@
 package dev.osmocode.codehub.controller;
 
 import dev.osmocode.codehub.dto.UserProfileDto;
+import dev.osmocode.codehub.dto.UserSummaryDto;
 import dev.osmocode.codehub.entity.User;
+import dev.osmocode.codehub.service.ProfilesService;
 import dev.osmocode.codehub.service.UserFollowService;
 import dev.osmocode.codehub.service.UserScoreService;
 import dev.osmocode.codehub.service.UserService;
+import dev.osmocode.codehub.utils.validator.pagination.PaginationValidator;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Controller
 public class ProfileController {
@@ -22,24 +27,35 @@ public class ProfileController {
     private final UserService userService;
     private final UserScoreService userScoreService;
     private final UserFollowService userFollowService;
+    private final ProfilesService profilesService;
+    private final PaginationValidator paginationValidator;
 
     public ProfileController(
             UserService userService,
             UserScoreService userScoreService,
-            UserFollowService userFollowService
+            UserFollowService userFollowService,
+            ProfilesService profilesService,
+            PaginationValidator paginationValidator
     ) {
         this.userService = userService;
         this.userScoreService = userScoreService;
         this.userFollowService = userFollowService;
+        this.profilesService = profilesService;
+        this.paginationValidator = paginationValidator;
     }
 
     //TODO: Add pagination
-    @GetMapping("/profile/all")
-    public ModelAndView getProfiles() {
-        List<User> users = userService.getAll();
+    @GetMapping("/profiles")
+    public ModelAndView getProfiles(
+            @RequestParam(value = "offset", required = false) Optional<Integer> optionalOffset,
+            @RequestParam(value = "limit", required = false) Optional<Integer> optionalLimit
+    ) {
+        var limit = paginationValidator.sanitizeLimit(optionalLimit.orElse(paginationValidator.defaultLimit()));
+        var offset = optionalOffset.orElse(0);
+        Page<UserSummaryDto> profilesWithPagination = profilesService.getProfilesWithPaginationAndSort(offset, limit);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("profiles");
-        modelAndView.addObject("users", users.stream().map(UserProfileDto::buildFrom).collect(Collectors.toSet()));
+        modelAndView.addObject("profilesPage", profilesWithPagination);
         return modelAndView;
     }
 
@@ -103,7 +119,7 @@ public class ProfileController {
                     "Note should be between 1 and 5",
                     HttpStatus.BAD_REQUEST);
         }
-        if(authentication.getName().equals(username)) {
+        if (authentication.getName().equals(username)) {
             return generateError(username,
                     "Can't follow yourself",
                     HttpStatus.BAD_REQUEST);
@@ -138,12 +154,12 @@ public class ProfileController {
             @RequestParam(name = "note") int note
     ) {
         if (null == authentication) {
-            return generateError(username, 
+            return generateError(username,
                     "User not authenticated can't update note",
                     HttpStatus.BAD_REQUEST);
         }
         if (note < 1 || note > 5) {
-            return generateError(username, 
+            return generateError(username,
                     "Note should be between 1 and 5",
                     HttpStatus.BAD_REQUEST);
         }
