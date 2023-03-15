@@ -6,14 +6,13 @@ import dev.osmocode.codehub.utils.UserCreationResult;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
 public class UserService {
 
     private final UserRepository repository;
-    
+
     public UserService(UserRepository repository) {
         this.repository = repository;
     }
@@ -35,10 +34,4 @@ public class UserService {
         repository.save(user);
         return new UserCreationResult(false);
     }
-
-    @Transactional
-    public List<User> getAll() {
-        return repository.findAll();
-    }
-    
 }

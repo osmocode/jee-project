@@ -1,6 +1,5 @@
 package dev.osmocode.codehub.entity;
 
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -51,26 +50,26 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "follower_id")
 
     )
-    private List<User> followers;
+    private Set<User> followers;
 
     @ManyToMany(
             fetch = FetchType.LAZY,
             mappedBy = "followers" //TODO: think about this
     )
-    private List<User> followings;
+    private Set<User> followings;
 
     @OneToMany(
             fetch = FetchType.LAZY,
             mappedBy = "target"
     )
-    private List<UserScore> attributedScores;
+    private Set<UserScore> attributedScores;
 
 
     @OneToMany(
             fetch = FetchType.LAZY,
             mappedBy = "assigner"
     )
-    private List<UserScore> distributedScores;
+    private Set<UserScore> distributedScores;
 
     /* constructors */
 
@@ -86,8 +85,8 @@ public class User {
         this.followers = user.followers;
         this.followings = user.followings;
         this.about = user.about;
-        this.attributedScores = new ArrayList<>();
-        this.distributedScores = new ArrayList<>();
+        this.attributedScores = new HashSet<>();
+        this.distributedScores = new HashSet<>();
     }
 
     public User(
@@ -101,11 +100,11 @@ public class User {
         this.email = email;
         this.authority = authority;
         this.since = System.currentTimeMillis();
-        this.followers = new ArrayList<>();
-        this.followings = new ArrayList<>();
+        this.followers = new HashSet<>();
+        this.followings = new HashSet<>();
         this.about = "";
-        this.attributedScores = new ArrayList<>();
-        this.distributedScores = new ArrayList<>();
+        this.attributedScores = new HashSet<>();
+        this.distributedScores = new HashSet<>();
     }
 
     /* social */
@@ -186,35 +185,35 @@ public class User {
         this.since = since;
     }
 
-    public List<User> getFollowers() {
+    public Set<User> getFollowers() {
         return followers;
     }
 
-    public void setFollowers(List<User> followers) {
+    public void setFollowers(Set<User> followers) {
         this.followers = followers;
     }
 
-    public List<User> getFollowings() {
+    public Set<User> getFollowings() {
         return followings;
     }
 
-    public void setFollowings(List<User> followings) {
+    public void setFollowings(Set<User> followings) {
         this.followings = followings;
     }
-
-    public List<UserScore> getAttributedScores() {
+    
+    public Set<UserScore> getAttributedScores() {
         return attributedScores;
     }
 
-    public void setAttributedScores(List<UserScore> attributedScores) {
+    public void setAttributedScores(Set<UserScore> attributedScores) {
         this.attributedScores = attributedScores;
     }
 
-    public List<UserScore> getDistributedScores() {
+    public Set<UserScore> getDistributedScores() {
         return distributedScores;
     }
 
-    public void setDistributedScores(List<UserScore> distributedScore) {
-        this.distributedScores = distributedScore;
+    public void setDistributedScores(Set<UserScore> distributedScores) {
+        this.distributedScores = distributedScores;
     }
 }

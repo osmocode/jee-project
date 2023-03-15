@@ -2,11 +2,7 @@ package dev.osmocode.codehub.controller;
 
 import dev.osmocode.codehub.dto.UserProfileDto;
 import dev.osmocode.codehub.dto.UserSummaryDto;
-import dev.osmocode.codehub.entity.User;
-import dev.osmocode.codehub.service.ProfilesService;
-import dev.osmocode.codehub.service.UserFollowService;
-import dev.osmocode.codehub.service.UserScoreService;
-import dev.osmocode.codehub.service.UserService;
+import dev.osmocode.codehub.service.*;
 import dev.osmocode.codehub.utils.validator.pagination.PaginationValidator;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -24,24 +20,23 @@ import java.util.Optional;
 @Controller
 public class ProfileController {
 
-    private final UserService userService;
     private final UserScoreService userScoreService;
     private final UserFollowService userFollowService;
     private final ProfilesService profilesService;
     private final PaginationValidator paginationValidator;
+    private final UserProfileService userProfileService;
 
     public ProfileController(
-            UserService userService,
             UserScoreService userScoreService,
             UserFollowService userFollowService,
             ProfilesService profilesService,
-            PaginationValidator paginationValidator
-    ) {
-        this.userService = userService;
+            PaginationValidator paginationValidator,
+            UserProfileService userProfileService) {
         this.userScoreService = userScoreService;
         this.userFollowService = userFollowService;
         this.profilesService = profilesService;
         this.paginationValidator = paginationValidator;
+        this.userProfileService = userProfileService;
     }
 
     //TODO: Add pagination
@@ -61,13 +56,10 @@ public class ProfileController {
 
     @GetMapping("/profile/{username}")
     public ModelAndView getProfile(@PathVariable String username) {
-        Optional<User> optionalUser = userService.findUserByUserName(username);
-        if (optionalUser.isEmpty()) {
-            return generateError(username, "User does not exists", HttpStatus.NOT_FOUND);
-        }
+        UserProfileDto user = userProfileService.getUserProfile(username);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("profile");
-        modelAndView.addObject("userDto", UserProfileDto.buildFrom(optionalUser.get()));
+        modelAndView.addObject("userDto", user);
         return modelAndView;
     }
 
@@ -78,8 +70,7 @@ public class ProfileController {
     ) {
         if (null == authentication) {
             return generateError(username,
-                    "User not authenticated can't follow another user",
-                    HttpStatus.BAD_REQUEST);
+                    "User not authenticated can't follow another user");
         }
         userFollowService.performUserFollow(authentication.getName(), username);
         ModelAndView modelAndView = new ModelAndView();
@@ -94,8 +85,7 @@ public class ProfileController {
     ) {
         if (null == authentication) {
             return generateError(username,
-                    "User not authenticated can't unfollow another user",
-                    HttpStatus.BAD_REQUEST);
+                    "User not authenticated can't unfollow another user");
         }
         userFollowService.performUserUnfollow(authentication.getName(), username);
         ModelAndView modelAndView = new ModelAndView();
@@ -111,18 +101,15 @@ public class ProfileController {
     ) {
         if (null == authentication) {
             return generateError(username,
-                    "User not authenticated can't note another user",
-                    HttpStatus.BAD_REQUEST);
+                    "User not authenticated can't note another user");
         }
         if (note < 1 || note > 5) {
             return generateError(username,
-                    "Note should be between 1 and 5",
-                    HttpStatus.BAD_REQUEST);
+                    "Note should be between 1 and 5");
         }
         if (authentication.getName().equals(username)) {
             return generateError(username,
-                    "Can't follow yourself",
-                    HttpStatus.BAD_REQUEST);
+                    "Can't follow yourself");
         }
         userScoreService.performUserAddScore(authentication.getName(), username, note);
         ModelAndView modelAndView = new ModelAndView();
@@ -138,8 +125,7 @@ public class ProfileController {
     ) {
         if (null == authentication) {
             return generateError(username,
-                    "User not authenticated can't delete note",
-                    HttpStatus.BAD_REQUEST);
+                    "User not authenticated can't delete note");
         }
         userScoreService.performUserDeleteScore(authentication.getName(), username);
         ModelAndView modelAndView = new ModelAndView();
@@ -155,13 +141,11 @@ public class ProfileController {
     ) {
         if (null == authentication) {
             return generateError(username,
-                    "User not authenticated can't update note",
-                    HttpStatus.BAD_REQUEST);
+                    "User not authenticated can't update note");
         }
         if (note < 1 || note > 5) {
             return generateError(username,
-                    "Note should be between 1 and 5",
-                    HttpStatus.BAD_REQUEST);
+                    "Note should be between 1 and 5");
         }
         userScoreService.performUserUpdateScore(authentication.getName(), username, note);
         ModelAndView modelAndView = new ModelAndView();
@@ -169,14 +153,14 @@ public class ProfileController {
         return modelAndView;
     }
 
-    private ModelAndView generateError(String username, String message, HttpStatus status) {
+    private ModelAndView generateError(String username, String message) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("error");
         modelAndView.addObject("timestamp", new Date().toString());
         modelAndView.addObject("path", "/profile/" + username);
         modelAndView.addObject("error", message);
-        modelAndView.addObject("status", status);
-        modelAndView.setStatus(status);
+        modelAndView.addObject("status", HttpStatus.BAD_REQUEST);
+        modelAndView.setStatus(HttpStatus.BAD_REQUEST);
         return modelAndView;
     }
 }
