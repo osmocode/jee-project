@@ -16,14 +16,17 @@ public class User {
     private Long id;
 
     @NotNull
-    @Size(max = 50, message = "Username should have at most 50 characters")
+    @Size(
+            max = 50,
+            message = "Username should have at most 50 characters"
+    )
     @Column(unique = true)
     private String username;
 
     @NotNull
     private String password;
 
-    @ManyToOne(fetch = FetchType.EAGER) //TODO: LAZY
+    @ManyToOne(fetch = FetchType.EAGER) // safe, is just 1 String
     @JoinColumn(name = "authority_id")
     private Authority authority;
 
@@ -31,14 +34,17 @@ public class User {
     @Email(message = "Wrong email format")
     private String email;
 
-    @Size(max = 190, message = "Description should have at most 190 characters")
+    @Size(
+            max = 190,
+            message = "Description should have at most 190 characters"
+    )
     private String about;
 
     @NotNull
     private Long since;
 
     @ManyToMany(
-            fetch = FetchType.EAGER //TODO: LAZY
+            fetch = FetchType.LAZY
     )
     @JoinTable(
             joinColumns = @JoinColumn(name = "user_id"),
@@ -48,23 +54,23 @@ public class User {
     private List<User> followers;
 
     @ManyToMany(
-            fetch = FetchType.EAGER, //TODO: LAZY
+            fetch = FetchType.LAZY,
             mappedBy = "followers" //TODO: think about this
     )
     private List<User> followings;
 
     @OneToMany(
-            fetch = FetchType.EAGER, //TODO: LAZY
+            fetch = FetchType.LAZY,
             mappedBy = "target"
     )
     private List<UserScore> attributedScores;
 
 
     @OneToMany(
-            fetch = FetchType.EAGER, //TODO: LAZY
+            fetch = FetchType.LAZY,
             mappedBy = "assigner"
     )
-    private List<UserScore> distributedScore;
+    private List<UserScore> distributedScores;
 
     /* constructors */
 
@@ -81,10 +87,15 @@ public class User {
         this.followings = user.followings;
         this.about = user.about;
         this.attributedScores = new ArrayList<>();
-        this.distributedScore = new ArrayList<>();
+        this.distributedScores = new ArrayList<>();
     }
 
-    public User(String username, String password, String email, Authority authority) {
+    public User(
+            String username,
+            String password,
+            String email,
+            Authority authority
+    ) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -94,7 +105,7 @@ public class User {
         this.followings = new ArrayList<>();
         this.about = "";
         this.attributedScores = new ArrayList<>();
-        this.distributedScore = new ArrayList<>();
+        this.distributedScores = new ArrayList<>();
     }
 
     /* social */
@@ -199,11 +210,11 @@ public class User {
         this.attributedScores = attributedScores;
     }
 
-    public List<UserScore> getDistributedScore() {
-        return distributedScore;
+    public List<UserScore> getDistributedScores() {
+        return distributedScores;
     }
 
-    public void setDistributedScore(List<UserScore> distributedScore) {
-        this.distributedScore = distributedScore;
+    public void setDistributedScores(List<UserScore> distributedScore) {
+        this.distributedScores = distributedScore;
     }
 }
