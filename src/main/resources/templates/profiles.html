@@ -8,13 +8,6 @@
     <tr>
         <th scope="col">Profile picture</th>
         <th scope="col">Username</th>
-        <!--        <th scope="col">Email</th>-->
-        <!--        <th scope="col">About</th>-->
-        <!--        <th scope="col">Since</th>-->
-        <!--        <th scope="col">Followers</th>-->
-        <!--        <th scope="col">Followings</th>-->
-        <!--        <th scope="col">Reviews</th>-->
-        <!--        <th scope="col">Grade</th>-->
         <th scope="col">Link to profile</th>
     </tr>
     </thead>
@@ -30,33 +23,26 @@
 </table>
 
 
-<nav aria-label="Page navigation row justify-content-between">
-    <ul class="pagination col-4">
-        <li class="page-item" th:if="${profilesPage.number != 0}">
-            <a class="page-link"
-               th:href="@{/profiles?offset={offset}&limit={limit}(offset=${profilesPage.number - 1}, limit=${profilesPage.size})}"
-               tabindex="-1" aria-disabled="true">Précédent</a>
+<nav>
+    <ul>
+        <li th:if="${profilesPage.number != 0}">
+            <a th:href="@{/profiles?offset={offset}&limit={limit}(offset=${profilesPage.number - 1}, limit=${profilesPage.size})}">Précédent</a>
         </li>
-        <li class="page-item" th:each="pageNumber : ${#numbers.sequence(0, profilesPage.totalPages - 1)}"
+        <li th:each="pageNumber : ${#numbers.sequence(0, profilesPage.totalPages - 1)}"
             th:classappend="${profilesPage.number == pageNumber} ? active">
-            <a class="page-link"
-               th:href="@{/profiles?offset={offset}&limit={limit}(offset=${pageNumber}, limit=${profilesPage.size})}"
+            <a th:href="@{/profiles?offset={offset}&limit={limit}(offset=${pageNumber}, limit=${profilesPage.size})}"
                th:text="${pageNumber + 1}"></a>
         </li>
-        <li class="page-item" th:if="${profilesPage.number != profilesPage.totalPages - 1}">
-            <a class="page-link"
-               th:href="@{/profiles?offset={offset}&limit={limit}(offset=${profilesPage.number + 1}, limit=${profilesPage.size})}">Suivant</a>
+        <li th:if="${profilesPage.number != profilesPage.totalPages - 1}">
+            <a th:href="@{/profiles?offset={offset}&limit={limit}(offset=${profilesPage.number + 1}, limit=${profilesPage.size})}">Suivant</a>
         </li>
     </ul>
-    <div class="col-4">
-        <a class="btn btn-default"
-           th:href="@{/profiles?offset={offset}&limit={limit}(offset=0, limit=15)}"
+    <div>
+        <a th:href="@{/profiles?offset={offset}&limit={limit}(offset=0, limit=15)}"
            th:classappend="${profilesPage.size==15} ? active">15</a>
-        <a class="btn btn-default"
-           th:href="@{/profiles?offset={offset}&limit={limit}(offset=0, limit=30)}"
+        <a th:href="@{/profiles?offset={offset}&limit={limit}(offset=0, limit=30)}"
            th:classappend="${profilesPage.size==30} ? active">30</a>
-        <a class="btn btn-default"
-           th:href="@{/profiles?offset={offset}&limit={limit}(offset=0, limit=50)}"
+        <a th:href="@{/profiles?offset={offset}&limit={limit}(offset=0, limit=50)}"
            th:classappend="${profilesPage.size==50} ? active">50</a>
         per page
     </div>
