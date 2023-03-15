@@ -1,5 +1,8 @@
 package dev.osmocode.codehub.utils;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class SinceFormater {
 
     private final static long HOUR_IN_MILLISECOND = 3_600_000;
@@ -8,12 +11,11 @@ public class SinceFormater {
     private final static long MONTH_IN_MILLISECOND = 30 * DAY_IN_MILLISECOND;
     private final static long YEAR_IN_MILLISECOND = 12 * MONTH_IN_MILLISECOND;
 
-    public static String formatSince(long timestamp) {
+    public String formatSince(long timestamp) {
         return process(System.currentTimeMillis() - timestamp);
     }
-
-    // No private for tests
-    static String process(long elapsed) {
+    
+    String process(long elapsed) {
         if (elapsed < DAY_IN_MILLISECOND) {
             long nbHour = elapsed / HOUR_IN_MILLISECOND;
             return nbHour + " hour" + (nbHour > 1 ? "s" : "");
