@@ -1,7 +1,46 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" class="h-full bg-gray-100">
-    <head th:replace="~{fragments/head :: head}"></head>
-    <body class="h-full">
-        <nav th:replace="~{fragments/nav :: nav}"></nav>
-    </body>
+<head th:replace="~{fragments/head :: head}"></head>
+<body class="h-full">
+<nav th:replace="~{fragments/nav :: nav}"></nav>
+<table>
+    <thead>
+    <tr>
+        <th scope="col">Username</th>
+        <th scope="col">Profile</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${userProfilePage}">
+        <td th:text="${user.username()}"></td>
+        <td><a th:href="@{/profile/{username} (username=${user.username()})}" th:text="'/profile/' + ${user.username()}"></a></td>
+    </tr>
+    </tbody>
+</table>
+
+<nav>
+    <ul>
+        <li th:if="${userProfilePage.number != 0}">
+            <a th:href="@{/dashboard?offset={offset}&limit={limit}(offset=${userProfilePage.number - 1}, limit=${userProfilePage.size})}">Précédent</a>
+        </li>
+        <li th:each="pageNumber : ${#numbers.sequence(0, userProfilePage.totalPages - 1)}"
+            th:classappend="${userProfilePage.number == pageNumber} ? active">
+            <a th:href="@{/dashboard?offset={offset}&limit={limit}(offset=${pageNumber}, limit=${userProfilePage.size})}"
+               th:text="${pageNumber + 1}"></a>
+        </li>
+        <li th:if="${userProfilePage.number != userProfilePage.totalPages - 1}">
+            <a th:href="@{/dashboard?offset={offset}&limit={limit}(offset=${userProfilePage.number + 1}, limit=${userProfilePage.size})}">Suivant</a>
+        </li>
+    </ul>
+    <div>
+        <a th:href="@{/dashboard?offset={offset}&limit={limit}(offset=0, limit=15)}"
+           th:classappend="${userProfilePage.size==15} ? active">15</a>
+        <a th:href="@{/dashboard?offset={offset}&limit={limit}(offset=0, limit=30)}"
+           th:classappend="${userProfilePage.size==30} ? active">30</a>
+        <a th:href="@{/dashboard?offset={offset}&limit={limit}(offset=0, limit=50)}"
+           th:classappend="${userProfilePage.size==50} ? active">50</a>
+        per page
+    </div>
+</nav>
+</body>
 </html>

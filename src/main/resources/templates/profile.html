@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--<head th:replace="~{fragments/head :: head}"></head>-->
+<body>
+
+<!-- User information -->
+<ul th:object="${userDto}">
+    <li th:text="'username: ' + ${userDto.username()}"></li>
+    <li th:text="'email: ' + ${userDto.email()}"></li>
+    <li th:text="'about: ' + ${userDto.about()}"></li>
+    <li th:text="'since: ' + ${userDto.since()}"></li>
+    <li th:text="'Followers: ' + ${userDto.followers()}"></li>
+    <li th:text="'Following: ' + ${userDto.following()}"></li>
+    <li th:text="'Reviews: ' + ${userDto.reviews()}"></li>
+    <li th:text="'Grade: ' + ${userDto.grade()}"></li>
+</ul>
+
+<!-- Follow button -->
+<form method="post" th:action="@{/profile/{username}/follow (username=${userDto.username()})}">
+    <button type="submit">Follow</button>
+</form>
+
+<!-- Unfollow button -->
+<form method="post" th:action="@{/profile/{username}/unfollow (username=${userDto.username()})}">
+    <button type="submit">Unfollow</button>
+</form>
+
+<!-- Score bar -->
+<form method="post" th:action="@{/profile/{username}/score (username=${userDto.username()})}">
+    <button type="submit" name="note" value="1">1*</button>
+    <button type="submit" name="note" value="2">2*</button>
+    <button type="submit" name="note" value="3">3*</button>
+    <button type="submit" name="note" value="4">4*</button>
+    <button type="submit" name="note" value="5">5*</button>
+</form>
+
+<!-- Update Score bar -->
+<form method="post" th:action="@{/profile/{username}/update-score (username=${userDto.username()})}">
+    <button type="submit" name="note" value="1">1*</button>
+    <button type="submit" name="note" value="2">2*</button>
+    <button type="submit" name="note" value="3">3*</button>
+    <button type="submit" name="note" value="4">4*</button>
+    <button type="submit" name="note" value="5">5*</button>
+</form>
+
+<!-- Delete Score button -->
+<form method="post" th:action="@{/profile/{username}/delete-score (username=${userDto.username()})}">
+    <button type="submit">Delete note</button>
+</form>
+
+</body>
+</html>
