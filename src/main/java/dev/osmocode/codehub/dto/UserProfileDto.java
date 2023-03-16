@@ -15,9 +15,8 @@ public record UserProfileDto(
         int reviews, // nb note
         double grade // average note
 ) {
-
-    public static UserProfileDto buildFrom(User user) {
-        double grade = user.getAttributedScores().stream().mapToInt(UserScore::getNote).average().orElse(0);
+    public static UserProfileDto buildFrom(User user, SinceFormater sinceFormater) {
+        double grade = user.getAttributedScores().stream().mapToInt(UserScore::getNote).average().orElse(0.0);
         grade = grade * 100;
         grade = (int) grade; // safe, grade should be between 0 and 5
         grade = grade / 100;
@@ -25,7 +24,7 @@ public record UserProfileDto(
                 user.getUsername(),
                 user.getEmail(),
                 user.getAbout(),
-                SinceFormater.formatSince(user.getSince()),
+                sinceFormater.formatSince(user.getSince()),
                 user.getFollowers().size(),
                 user.getFollowings().size(),
                 user.getAttributedScores().size(),

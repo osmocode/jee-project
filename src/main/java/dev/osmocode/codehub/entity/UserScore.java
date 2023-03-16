@@ -12,7 +12,7 @@ public class UserScore {
     private int note;
 
     @ManyToOne(
-            //TODO: fetch = FetchType.LAZY
+            fetch = FetchType.LAZY
     )
     @JoinTable(
             name = "assigner_user_score",
@@ -22,7 +22,7 @@ public class UserScore {
     private User assigner;
 
     @ManyToOne(
-            //TODO: fetch = FetchType.LAZY
+            fetch = FetchType.LAZY
     )
     @JoinTable(
             name = "target_user_score",

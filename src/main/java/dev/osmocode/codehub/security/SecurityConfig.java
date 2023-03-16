@@ -14,6 +14,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import java.util.stream.IntStream;
+
 @Configuration
 @EnableWebSecurity(/*debug = true*/)
 public class SecurityConfig {
@@ -36,8 +38,9 @@ public class SecurityConfig {
                             "/images/**",
                             "/home",
                             "/profile/**",
-                            "/register"
-                    ).permitAll();
+                            "/register",
+                            "/profiles"
+                            ).permitAll();
                     // ADMIN ROUTE
                     requests.requestMatchers(
                             "/admin"
@@ -71,11 +74,11 @@ public class SecurityConfig {
         Authority roleUser = authorityService.saveAuthority(new Authority(Role.USER.toString()));
         Authority roleAdmin = authorityService.saveAuthority(new Authority(Role.ADMIN.toString()));
 
-        User user = new User(
-                "user",
-                passwordEncoder.encode("password"),
-                "user@uge-overflow.com",
-                roleUser
+        User admin = new User(
+                "admin",
+                passwordEncoder.encode("admin"),
+                "admin@uge-overflow.com",
+                roleAdmin
         );
 
         User ypicker = new User(
@@ -85,15 +88,27 @@ public class SecurityConfig {
                 roleUser
         );
 
-        User admin = new User(
-                "admin",
-                passwordEncoder.encode("admin"),
-                "admin@uge-overflow.com",
-                roleAdmin
+        User user = new User(
+                "user",
+                passwordEncoder.encode("password"),
+                "user@uge-overflow.com",
+                roleUser
         );
-        customUserDetailsService.saveUser(user);
-        customUserDetailsService.saveUser(ypicker);
+
         customUserDetailsService.saveUser(admin);
+        customUserDetailsService.saveUser(ypicker);
+        customUserDetailsService.saveUser(user);
+
+        IntStream.range(1, 121).forEach(i -> {
+            User user_i = new User(
+                    "user_" + i,
+                    passwordEncoder.encode("password"),
+                    "user_" + i + "@uge-overflow.com",
+                    roleUser
+            );
+            customUserDetailsService.saveUser(user_i);
+        });
+
         return customUserDetailsService;
     }
 

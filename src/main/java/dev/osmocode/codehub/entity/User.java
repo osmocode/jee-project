@@ -1,6 +1,5 @@
 package dev.osmocode.codehub.entity;
 
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -16,14 +15,17 @@ public class User {
     private Long id;
 
     @NotNull
-    @Size(max = 50, message = "Username should have at most 50 characters")
+    @Size(
+            max = 50,
+            message = "Username should have at most 50 characters"
+    )
     @Column(unique = true)
     private String username;
 
     @NotNull
     private String password;
 
-    @ManyToOne(fetch = FetchType.EAGER) //TODO: LAZY
+    @ManyToOne(fetch = FetchType.EAGER) // safe, is just 1 String
     @JoinColumn(name = "authority_id")
     private Authority authority;
 
@@ -31,45 +33,49 @@ public class User {
     @Email(message = "Wrong email format")
     private String email;
 
-    @Size(max = 190, message = "Description should have at most 190 characters")
+    @Size(
+            max = 190,
+            message = "Description should have at most 190 characters"
+    )
     private String about;
 
     @NotNull
     private Long since;
 
     @ManyToMany(
-            fetch = FetchType.EAGER //TODO: LAZY
+            fetch = FetchType.LAZY
     )
     @JoinTable(
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "follower_id")
 
     )
-    private List<User> followers;
+    private Set<User> followers;
 
     @ManyToMany(
-            fetch = FetchType.EAGER, //TODO: LAZY
-            mappedBy = "followers" //TODO: think about this
+            fetch = FetchType.LAZY,
+            mappedBy = "followers"
     )
-    private List<User> followings;
+    private Set<User> followings;
 
     @OneToMany(
-            fetch = FetchType.EAGER, //TODO: LAZY
+            fetch = FetchType.LAZY,
             mappedBy = "target"
     )
-    private List<UserScore> attributedScores;
+    private Set<UserScore> attributedScores;
 
 
     @OneToMany(
-            fetch = FetchType.EAGER, //TODO: LAZY
+            fetch = FetchType.LAZY,
             mappedBy = "assigner"
     )
-    private List<UserScore> distributedScore;
+    private Set<UserScore> distributedScores;
 
     /* constructors */
 
     public User() {
     }
+
 
     public User(User user) {
         this.username = user.username;
@@ -80,21 +86,26 @@ public class User {
         this.followers = user.followers;
         this.followings = user.followings;
         this.about = user.about;
-        this.attributedScores = new ArrayList<>();
-        this.distributedScore = new ArrayList<>();
+        this.attributedScores = new HashSet<>();
+        this.distributedScores = new HashSet<>();
     }
 
-    public User(String username, String password, String email, Authority authority) {
+    public User(
+            String username,
+            String password,
+            String email,
+            Authority authority
+    ) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.authority = authority;
         this.since = System.currentTimeMillis();
-        this.followers = new ArrayList<>();
-        this.followings = new ArrayList<>();
+        this.followers = new HashSet<>();
+        this.followings = new HashSet<>();
         this.about = "";
-        this.attributedScores = new ArrayList<>();
-        this.distributedScore = new ArrayList<>();
+        this.attributedScores = new HashSet<>();
+        this.distributedScores = new HashSet<>();
     }
 
     /* social */
@@ -175,35 +186,35 @@ public class User {
         this.since = since;
     }
 
-    public List<User> getFollowers() {
+    public Set<User> getFollowers() {
         return followers;
     }
 
-    public void setFollowers(List<User> followers) {
+    public void setFollowers(Set<User> followers) {
         this.followers = followers;
     }
 
-    public List<User> getFollowings() {
+    public Set<User> getFollowings() {
         return followings;
     }
 
-    public void setFollowings(List<User> followings) {
+    public void setFollowings(Set<User> followings) {
         this.followings = followings;
     }
 
-    public List<UserScore> getAttributedScores() {
+    public Set<UserScore> getAttributedScores() {
         return attributedScores;
     }
 
-    public void setAttributedScores(List<UserScore> attributedScores) {
+    public void setAttributedScores(Set<UserScore> attributedScores) {
         this.attributedScores = attributedScores;
     }
 
-    public List<UserScore> getDistributedScore() {
-        return distributedScore;
+    public Set<UserScore> getDistributedScores() {
+        return distributedScores;
     }
 
-    public void setDistributedScore(List<UserScore> distributedScore) {
-        this.distributedScore = distributedScore;
+    public void setDistributedScores(Set<UserScore> distributedScores) {
+        this.distributedScores = distributedScores;
     }
 }

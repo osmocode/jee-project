@@ -1,4 +1,3 @@
-<!--
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" class="h-full bg-gray-100">
 <head th:replace="~{fragments/head :: head}"></head>
@@ -7,43 +6,46 @@
 <table>
     <thead>
     <tr>
+        <th scope="col">Profile picture</th>
         <th scope="col">Username</th>
-        <th scope="col">Email</th>
-        <th scope="col">About</th>
-        <th scope="col">Since</th>
-        <th scope="col">Followers</th>
-        <th scope="col">Followings</th>
-        <th scope="col">Reviews</th>
-        <th scope="col">Grade</th>
-        <th scope="col">Profile</th>
+        <th scope="col">Link to profile</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="user : ${users}">
+    <tr th:each="user : ${profilesPage}">
+        <td><img src="https://cdn1.iconfinder.com/data/icons/dashboard-ui-vol-1-glyph/48/Sed-03-512.png" width="96"
+                 height="96"></td>
         <td th:text="${user.username()}"></td>
-        <td th:text="${user.email()}"></td>
-        <td th:text="${user.about()}"></td>
-        <td th:text="${user.since()}"></td>
-        <td th:text="${user.followers()}"></td>
-        <td th:text="${user.following()}"></td>
-        <td th:text="${user.reviews()}"></td>
-        <td th:text="${user.grade()}"></td>
-        <td><a th:href="@{/profile/{username} (username=${user.username()})}" th:text="'/profile/' + ${user.username()}"></a></td>
+        <td><a th:href="@{/profile/{username} (username=${user.username()})}"
+               th:text="'/profile/' + ${user.username()}"></a></td>
     </tr>
     </tbody>
 </table>
+
+
+<nav>
+    <ul>
+        <li th:if="${profilesPage.number != 0}">
+            <a th:href="@{/profiles?offset={offset}&limit={limit}(offset=${profilesPage.number - 1}, limit=${profilesPage.size})}">Précédent</a>
+        </li>
+        <li th:each="pageNumber : ${#numbers.sequence(0, profilesPage.totalPages - 1)}"
+            th:classappend="${profilesPage.number == pageNumber} ? active">
+            <a th:href="@{/profiles?offset={offset}&limit={limit}(offset=${pageNumber}, limit=${profilesPage.size})}"
+               th:text="${pageNumber + 1}"></a>
+        </li>
+        <li th:if="${profilesPage.number != profilesPage.totalPages - 1}">
+            <a th:href="@{/profiles?offset={offset}&limit={limit}(offset=${profilesPage.number + 1}, limit=${profilesPage.size})}">Suivant</a>
+        </li>
+    </ul>
+    <div>
+        <a th:href="@{/profiles?offset={offset}&limit={limit}(offset=0, limit=15)}"
+           th:classappend="${profilesPage.size==15} ? active">15</a>
+        <a th:href="@{/profiles?offset={offset}&limit={limit}(offset=0, limit=30)}"
+           th:classappend="${profilesPage.size==30} ? active">30</a>
+        <a th:href="@{/profiles?offset={offset}&limit={limit}(offset=0, limit=50)}"
+           th:classappend="${profilesPage.size==50} ? active">50</a>
+        per page
+    </div>
+</nav>
 </body>
-</html>
--->
-<!DOCTYPE html>
-<html lang="en"
-      class="h-full"
-      xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/head :: head}"></head>
-    <body class="h-full">
-        <aside th:replace="~{fragments/sidebar :: sidebar('Users')}"></aside>
-        <div class="flex flex-1 flex-col lg:pl-64">
-            <nav th:replace="~{fragments/nav :: nav}"></nav>
-        </div>
-    </body>
 </html>

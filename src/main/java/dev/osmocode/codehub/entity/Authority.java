@@ -15,7 +15,7 @@ public class Authority {
     private String authority;
 
     @OneToMany(
-            //TODO: fetch = FetchType.LAZY,
+            fetch = FetchType.LAZY,
             mappedBy = "authority"
     )
     private Set<User> users;
