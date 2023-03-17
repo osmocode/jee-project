@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<ul th:each="tag : ${tagsPage}">
+    <li th:text="${tag.getId()}  + ' ' + ${tag.getName()}"></li>
+</ul>
+
+<p>PAGINATION</p>
+
+<nav>
+    <ul>
+        <li th:if="${tagsPage.number != 0}">
+            <a th:href="@{/tags?search={search}&offset={offset}&limit={limit}(search=${search}, offset=${tagsPage.number - 1}, limit=${tagsPage.size})}">Précédent</a>
+        </li>
+        <li th:each="pageNumber : ${#numbers.sequence(0, tagsPage.totalPages - 1)}"
+            th:classappend="${tagsPage.number == pageNumber} ? active">
+            <a th:href="@{/tags?search={search}&offset={offset}&limit={limit}(search=${search}, offset=${pageNumber}, limit=${tagsPage.size})}"
+               th:text="${pageNumber + 1}"></a>
+        </li>
+        <li th:if="${tagsPage.number != tagsPage.totalPages - 1}">
+            <a th:href="@{/tags?search={search}&offset={offset}&limit={limit}(search=${search}, offset=${tagsPage.number + 1}, limit=${tagsPage.size})}">Suivant</a>
+        </li>
+    </ul>
+    <div>
+        <a th:href="@{/tags?search={search}&offset={offset}&limit={limit}(search=${search}, offset=0, limit=15)}"
+           th:classappend="${tagsPage.size==15} ? active">15</a>
+        <a th:href="@{/tags?search={search}&offset={offset}&limit={limit}(search=${search}, offset=0, limit=30)}"
+           th:classappend="${tagsPage.size==30} ? active">30</a>
+        <a th:href="@{/tags?search={search}&offset={offset}&limit={limit}(search=${search}, offset=0, limit=50)}"
+           th:classappend="${tagsPage.size==50} ? active">50</a>
+        per page
+    </div>
+</nav>
+</body>
+</html>

@@ -14,8 +14,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import java.util.stream.IntStream;
-
 @Configuration
 @EnableWebSecurity(/*debug = true*/)
 public class SecurityConfig {
@@ -39,7 +37,8 @@ public class SecurityConfig {
                             "/home",
                             "/profile/**",
                             "/register",
-                            "/profiles"
+                            "/profiles",
+                            "/tags**"
                             ).permitAll();
                     // ADMIN ROUTE
                     requests.requestMatchers(
@@ -98,17 +97,6 @@ public class SecurityConfig {
         customUserDetailsService.saveUser(admin);
         customUserDetailsService.saveUser(ypicker);
         customUserDetailsService.saveUser(user);
-        
-        IntStream.range(1, 121).forEach(i -> {
-            User user_i = new User(
-                    "user_" + i,
-                    passwordEncoder.encode("password"),
-                    "user_" + i + "@uge-overflow.com",
-                    roleUser
-            );
-            customUserDetailsService.saveUser(user_i);
-        });
-
         return customUserDetailsService;
     }
 

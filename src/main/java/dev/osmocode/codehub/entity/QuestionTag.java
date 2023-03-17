@@ -10,12 +10,12 @@ public class QuestionTag {
     private Long id;
     
     @Column(unique = true)
-    private String tag;
+    private String name;
     
     public QuestionTag() {}
     
-    public QuestionTag(String tag) {
-        this.tag = tag;
+    public QuestionTag(String name) {
+        this.name = name;
     }
 
     public Long getId() {
@@ -26,11 +26,11 @@ public class QuestionTag {
         this.id = id;
     }
 
-    public String getTag() {
-        return tag;
+    public String getName() {
+        return name;
     }
 
-    public void setTag(String tag) {
-        this.tag = tag;
+    public void setName(String name) {
+        this.name = name;
     }
 }
