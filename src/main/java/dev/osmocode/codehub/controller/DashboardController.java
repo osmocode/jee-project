@@ -25,9 +25,7 @@ public class DashboardController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("dashboard");
         User user = userService.findUserByUserName(authentication.getName()).orElseThrow(() -> new RuntimeException(""));
-        modelAndView.addObject("followings", user.getFollowings().stream().map(UserProfileDto::buildFrom).collect(Collectors.toSet()));
         modelAndView.addObject("demo", "# Demo title\n## Sub title\n```py\ntoto=[]\ntoto.appen(10)\n```");
-
         return modelAndView;
     }
 
