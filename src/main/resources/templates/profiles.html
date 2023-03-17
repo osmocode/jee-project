@@ -39,11 +39,19 @@
 <html lang="en"
       class="h-full"
       xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/head :: head}"></head>
+    <head th:replace="~{fragments/head :: head}"></head>
     <body class="h-full">
         <aside th:replace="~{fragments/sidebar :: sidebar('Users')}"></aside>
         <div class="flex flex-1 flex-col lg:pl-64">
             <nav th:replace="~{fragments/nav :: nav}"></nav>
+            <main class="flex-1">
+
+                <article id="content"></article>
+                <script>
+                    document.getElementById('content').innerHTML =
+                        marked.parse('# Marked in browser\n\nRendered by **marked**.');
+                </script>
+            </main>
         </div>
     </body>
 </html>
