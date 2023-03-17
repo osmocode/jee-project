@@ -39,7 +39,6 @@ public class ProfileController {
         this.userProfileService = userProfileService;
     }
 
-    //TODO: Add pagination
     @GetMapping("/profiles")
     public ModelAndView getProfiles(
             @RequestParam(value = "offset", required = false) Optional<Integer> optionalOffset,
@@ -57,8 +56,7 @@ public class ProfileController {
     @GetMapping("/profile/{username}")
     public ModelAndView getProfile(@PathVariable String username) {
         UserProfileDto user = userProfileService.getUserProfile(username);
-        if(user == null)
-        {
+        if (user == null) {
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.setViewName("error");
             return modelAndView;
@@ -66,6 +64,49 @@ public class ProfileController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("profile");
         modelAndView.addObject("userDto", user);
+        return modelAndView;
+    }
+
+    @GetMapping("/profile/{username}/followers")
+    public ModelAndView getUserFollowers(
+            @PathVariable String username,
+            @RequestParam(value = "offset", required = false) Optional<Integer> optionalOffset,
+            @RequestParam(value = "limit", required = false) Optional<Integer> optionalLimit
+    ) {
+        var limit = paginationValidator.sanitizeLimit(optionalLimit.orElse(paginationValidator.defaultLimit()));
+        var offset = optionalOffset.orElse(0);
+
+        Page<UserSummaryDto> followersPage = userProfileService.findUserByUsernameFetchingFollowers(username, offset, limit);
+        if (followersPage == null) {
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.setViewName("error");
+            return modelAndView;
+        }
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("followers");
+        modelAndView.addObject("followersPage", followersPage);
+        return modelAndView;
+    }
+
+
+    @GetMapping("/profile/{username}/followings")
+    public ModelAndView getUserFollowings(
+            @PathVariable String username,
+            @RequestParam(value = "offset", required = false) Optional<Integer> optionalOffset,
+            @RequestParam(value = "limit", required = false) Optional<Integer> optionalLimit
+    ) {
+        var limit = paginationValidator.sanitizeLimit(optionalLimit.orElse(paginationValidator.defaultLimit()));
+        var offset = optionalOffset.orElse(0);
+
+        Page<UserSummaryDto> followingsPage = userProfileService.findUserByUsernameFetchingFollowings(username, offset, limit);
+        if (followingsPage == null) {
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.setViewName("error");
+            return modelAndView;
+        }
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("followings");
+        modelAndView.addObject("followingsPage", followingsPage);
         return modelAndView;
     }
 

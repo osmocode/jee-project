@@ -16,7 +16,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsUserByEmail(String email);
 
+    boolean existsUserByUsername(String username);
+
     Page<User> findUserByFollowersUsername(String username, Pageable pageable);
+
+    Page<User> findUserByFollowingsUsername(String username, Pageable pageable);
 
     @Query("SELECT u FROM users u LEFT JOIN FETCH u.followers LEFT JOIN FETCH u.followings LEFT JOIN FETCH u.attributedScores WHERE u.username=:username")
     Optional<User> findUserFetchingProfile(String username);

@@ -18,11 +18,6 @@ public class ProfilesService {
     }
     
     @Transactional
-    public Page<UserSummaryDto> getProfilesWithPagination(int offset, int limit) {
-        return repository.findAll(PageRequest.of(offset, limit)).map(UserSummaryDto::buildFrom);
-    }
-
-    @Transactional
     public Page<UserSummaryDto> getProfilesWithPaginationAndSort(int offset, int limit) {
         return repository.findAll(PageRequest.of(offset, limit, Sort.by("id").ascending())).map(UserSummaryDto::buildFrom);
     }
