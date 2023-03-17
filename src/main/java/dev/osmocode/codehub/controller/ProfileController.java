@@ -44,8 +44,8 @@ public class ProfileController {
             @RequestParam(value = "offset", required = false) Optional<Integer> optionalOffset,
             @RequestParam(value = "limit", required = false) Optional<Integer> optionalLimit
     ) {
-        var limit = paginationValidator.sanitizeLimit(optionalLimit.orElse(paginationValidator.defaultLimit()));
-        var offset = optionalOffset.orElse(0);
+        var limit = paginationValidator.sanitizeLimit(optionalLimit);
+        var offset = paginationValidator.sanitizeOffset(optionalOffset);
         Page<UserSummaryDto> profilesWithPagination = profilesService.getProfilesWithPaginationAndSort(offset, limit);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("profiles");
@@ -73,8 +73,8 @@ public class ProfileController {
             @RequestParam(value = "offset", required = false) Optional<Integer> optionalOffset,
             @RequestParam(value = "limit", required = false) Optional<Integer> optionalLimit
     ) {
-        var limit = paginationValidator.sanitizeLimit(optionalLimit.orElse(paginationValidator.defaultLimit()));
-        var offset = optionalOffset.orElse(0);
+        var limit = paginationValidator.sanitizeLimit(optionalLimit);
+        var offset = paginationValidator.sanitizeOffset(optionalOffset);
 
         Page<UserSummaryDto> followersPage = userProfileService.findUserByUsernameFetchingFollowers(username, offset, limit);
         if (followersPage == null) {
@@ -95,8 +95,8 @@ public class ProfileController {
             @RequestParam(value = "offset", required = false) Optional<Integer> optionalOffset,
             @RequestParam(value = "limit", required = false) Optional<Integer> optionalLimit
     ) {
-        var limit = paginationValidator.sanitizeLimit(optionalLimit.orElse(paginationValidator.defaultLimit()));
-        var offset = optionalOffset.orElse(0);
+        var limit = paginationValidator.sanitizeLimit(optionalLimit);
+        var offset = paginationValidator.sanitizeOffset(optionalOffset);
 
         Page<UserSummaryDto> followingsPage = userProfileService.findUserByUsernameFetchingFollowings(username, offset, limit);
         if (followingsPage == null) {
