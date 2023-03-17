@@ -1,106 +1,77 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" class="h-full bg-gray-100">
 <head th:replace="~{fragments/head :: head}"></head>
-<body class="h-full">
-<aside th:replace="~{fragments/sidebar :: sidebar('Feed')}"></aside>
-<div class="flex flex-1 flex-col lg:pl-64">
-    <nav th:replace="~{fragments/nav :: nav}"></nav>
+        <body class="h-full">
+            <aside th:replace="~{fragments/sidebar :: sidebar('Feed')}"></aside>
+            <div class="flex flex-1 flex-col lg:pl-64">
+                <nav th:replace="~{fragments/nav :: nav}"></nav>
 
-<div class="bg-gray-900 py-24 sm:py-32">
-    <div class="mx-auto max-w-7xl px-6 text-center lg:px-8">
-        <div class="mx-auto max-w-2xl">
-            <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">Follow our members</h2>
-            <p class="mt-4 text-lg leading-8 text-gray-400">Join the community and ask your first question</p>
-        </div>
-        <ul  role="list" class="mx-auto mt-20 grid max-w-2xl grid-cols-1 gap-6 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3 lg:gap-8">
-            <li th:each="user : ${profilesPage}" class="rounded-2xl bg-gray-800 py-10 px-8">
-                <img class="mx-auto h-48 w-48 rounded-full md:h-56 md:w-56" src="https://images.unsplash.com/photo-1519345182560-3f2917c472ef?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80" alt="">
-                <h3 th:text="${user.username()}" class="mt-6 text-base font-semibold leading-7 tracking-tight text-white"></h3>
+                <div class="bg-white py-24 sm:py-32">
+                    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                        <div class="mx-auto max-w-2xl lg:mx-0">
+                            <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Member</h2>
+                            <p class="mt-6 text-lg leading-8 text-gray-600">Following members impacts your experience within the platform. Give a confidence rating to the member you follow to improve your search.</p>
+                        </div>
+                        <ul role="list" class="mx-auto mt-20 grid max-w-2xl grid-cols-2 gap-y-16 gap-x-8 text-center sm:grid-cols-3 md:grid-cols-4 lg:mx-0 lg:max-w-none lg:grid-cols-5 xl:grid-cols-6">
+                            <li th:each="user : ${profilesPage}">
+<!--                                <img class="mx-auto h-24 w-24 rounded-full bg-gray-200" src="https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80" alt="">-->
+                                <svg class="h-24 w-24 mx-auto rounded-full bg-gray-200" th:data-jdenticon-value="${user.username()}"></svg>
+                                <h3 class="mt-6 text-base font-semibold leading-7 tracking-tight text-gray-900"
+                                    th:text="${user.username()}"
+                                ></h3>
+                                <p class="text-sm leading-6 text-gray-600"
+                                   th:href="@{/profile/{username} (username=${user.username()})}"
+                                   th:text="'/profile/' + ${user.username()}"
+                                ></p>
+                            </li>
 
-                <p class="text-sm leading-6 text-gray-400">
-                    <a th:href="@{/profile/{username} (username=${user.username()})}"
-                       th:text="'/profile/' + ${user.username()}">
-                    </a>
-                </p>
+                        </ul>
+                    </div>
+                    </br>
+                    <div class="mx-auto max-w-7xl px-6 text-center lg:px-8">
+                        <nav class="flex items-center justify-between  px-4 sm:px-0">
+                            <div class="-mt-px flex w-0 flex-1">
+                                <a th:href="@{/profiles?offset={offset}&limit={limit}(offset=${profilesPage.number - 1},
+                                limit=${profilesPage.size})}" class="inline-flex items-center border-t-2 border-transparent pt-4 pr-1 text-sm font-medium text-gray-500 hover:text-gray-300">
+                                    <svg class="mr-3 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                        <path fill-rule="evenodd" d="M18 10a.75.75 0 01-.75.75H4.66l2.1 1.95a.75.75 0 11-1.02 1.1l-3.5-3.25a.75.75 0 010-1.1l3.5-3.25a.75.75 0 111.02 1.1l-2.1 1.95h12.59A.75.75 0 0118 10z" clip-rule="evenodd" />
+                                    </svg>
+                                    Previous
+                                </a>
+                            </div>
+                            <div th:each="pageNumber : ${#numbers.sequence(0, profilesPage.totalPages - 1)}"
+                                 th:classappend="${profilesPage.number == pageNumber} ? active" class="hidden md:-mt-px md:flex">
+                                <a th:href="@{/profiles?offset={offset}&limit={limit}(offset=${pageNumber}, limit=${profilesPage.size})}"
+                                   th:text="${pageNumber + 1}" class="inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-500  hover:text-gray-300"></a>
+                            </div>
+                            <div th:if="${profilesPage.number != profilesPage.totalPages - 1}" class="-mt-px flex w-0 flex-1 justify-end">
+                                <a th:href="@{/profiles?offset={offset}&limit={limit}(offset=${profilesPage.number + 1}, limit=${profilesPage.size})}" class="inline-flex items-center border-t-2 border-transparent pt-4 pl-1 text-sm font-medium text-gray-500  hover:text-gray-300">
+                                    Next
+                                    <svg class="ml-3 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                        <path fill-rule="evenodd" d="M2 10a.75.75 0 01.75-.75h12.59l-2.1-1.95a.75.75 0 111.02-1.1l3.5 3.25a.75.75 0 010 1.1l-3.5 3.25a.75.75 0 11-1.02-1.1l2.1-1.95H2.75A.75.75 0 012 10z" clip-rule="evenodd" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </nav>
+                    </div>
+                    </br>
+                    <div class="mx-auto max-w-7xl px-6 text-center lg:px-8">
+                        <a th:href="@{/profiles?offset={offset}&limit={limit}(offset=0, limit=15)}"
+                           th:classappend="${profilesPage.size == 15} ? 'active' : ''"
+                           class="inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-500 hover:text-gray-300"
+                        >15</a>
+                        <a th:href="@{/profiles?offset={offset}&limit={limit}(offset=0, limit=30)}"
+                           th:classappend="${profilesPage.size == 30} ? 'active' : ''"
+                           class="inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-500 hover:text-gray-300"
+                        >30</a>
+                        <a th:href="@{/profiles?offset={offset}&limit={limit}(offset=0, limit=50)}"
+                           th:classappend="${profilesPage.size == 50} ? 'active' : ''"
+                           class="inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-500 hover:text-gray-300"
+                        >50</a>
+                    </div>
+                </div>
 
-                <ul role="list" class="mt-6 flex justify-center gap-x-6">
-                    <li>
-                        <a href="#" class="text-gray-400 hover:text-gray-300">
-                            <span class="sr-only">Twitter</span>
-                            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                                <path d="M6.29 18.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0020 3.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.073 4.073 0 01.8 7.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 010 16.407a11.616 11.616 0 006.29 1.84" />
-                            </svg>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="text-gray-400 hover:text-gray-300">
-                            <span class="sr-only">LinkedIn</span>
-                            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                                <path fill-rule="evenodd" d="M16.338 16.338H13.67V12.16c0-.995-.017-2.277-1.387-2.277-1.39 0-1.601 1.086-1.601 2.207v4.248H8.014v-8.59h2.559v1.174h.037c.356-.675 1.227-1.387 2.526-1.387 2.703 0 3.203 1.778 3.203 4.092v4.711zM5.005 6.575a1.548 1.548 0 11-.003-3.096 1.548 1.548 0 01.003 3.096zm-1.337 9.763H6.34v-8.59H3.667v8.59zM17.668 1H2.328C1.595 1 1 1.581 1 2.298v15.403C1 18.418 1.595 19 2.328 19h15.34c.734 0 1.332-.582 1.332-1.299V2.298C19 1.581 18.402 1 17.668 1z" clip-rule="evenodd" />
-                            </svg>
-                        </a>
-                    </li>
-                </ul>
-            </li>
 
-
-            <!-- More people... -->
-        </ul>
-    </div>
-    </br>
-    <div class="mx-auto max-w-7xl px-6 text-center lg:px-8">
-        <nav class="flex items-center justify-between  px-4 sm:px-0">
-
-
-            <div class="-mt-px flex w-0 flex-1">
-                <a th:href="@{/profiles?offset={offset}&limit={limit}(offset=${profilesPage.number - 1},
-                limit=${profilesPage.size})}" class="inline-flex items-center border-t-2 border-transparent pt-4 pr-1 text-sm font-medium text-gray-500 hover:text-gray-300">
-                    <svg class="mr-3 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                        <path fill-rule="evenodd" d="M18 10a.75.75 0 01-.75.75H4.66l2.1 1.95a.75.75 0 11-1.02 1.1l-3.5-3.25a.75.75 0 010-1.1l3.5-3.25a.75.75 0 111.02 1.1l-2.1 1.95h12.59A.75.75 0 0118 10z" clip-rule="evenodd" />
-                    </svg>
-                    Previous
-                </a>
             </div>
-
-
-            <div th:each="pageNumber : ${#numbers.sequence(0, profilesPage.totalPages - 1)}"
-                 th:classappend="${profilesPage.number == pageNumber} ? active" class="hidden md:-mt-px md:flex">
-
-                <a th:href="@{/profiles?offset={offset}&limit={limit}(offset=${pageNumber}, limit=${profilesPage.size})}"
-                   th:text="${pageNumber + 1}" class="inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-500  hover:text-gray-300"></a>
-
-            </div>
-
-
-            <div th:if="${profilesPage.number != profilesPage.totalPages - 1}" class="-mt-px flex w-0 flex-1 justify-end">
-                <a th:href="@{/profiles?offset={offset}&limit={limit}(offset=${profilesPage.number + 1}, limit=${profilesPage.size})}" class="inline-flex items-center border-t-2 border-transparent pt-4 pl-1 text-sm font-medium text-gray-500  hover:text-gray-300">
-                    Next
-                    <svg class="ml-3 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                        <path fill-rule="evenodd" d="M2 10a.75.75 0 01.75-.75h12.59l-2.1-1.95a.75.75 0 111.02-1.1l3.5 3.25a.75.75 0 010 1.1l-3.5 3.25a.75.75 0 11-1.02-1.1l2.1-1.95H2.75A.75.75 0 012 10z" clip-rule="evenodd" />
-                    </svg>
-                </a>
-            </div>
-        </nav>
-    </div>
-    </br>
-    <div class="mx-auto max-w-7xl px-6 text-center lg:px-8">
-        <a th:href="@{/profiles?offset={offset}&limit={limit}(offset=0, limit=15)}"
-           th:classappend="${profilesPage.size==15} ? active"
-           class="inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-500  hover:text-gray-300"
-        >15</a>
-        <a th:href="@{/profiles?offset={offset}&limit={limit}(offset=0, limit=30)}"
-           th:classappend="${profilesPage.size==30} ? active"
-           class="inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-500  hover:text-gray-300"
-        >30</a>
-        <a th:href="@{/profiles?offset={offset}&limit={limit}(offset=0, limit=50)}"
-           th:classappend="${profilesPage.size==50} ? active"
-           class="inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-500  hover:text-gray-300"
-        >50</a>
-
-    </div>
-
-</div>
-</div>
-
-</body>
+        </body>
 </html>
