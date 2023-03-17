@@ -39,7 +39,8 @@ public class SecurityConfig {
                             "/home",
                             "/profile/**",
                             "/register",
-                            "/profiles"
+                            "/profiles",
+                            "/tags**"
                             ).permitAll();
                     // ADMIN ROUTE
                     requests.requestMatchers(
@@ -80,7 +81,7 @@ public class SecurityConfig {
                 "admin@uge-overflow.com",
                 roleAdmin
         );
-        
+
         User ypicker = new User(
                 "ypicker",
                 passwordEncoder.encode("password"),
@@ -98,7 +99,7 @@ public class SecurityConfig {
         customUserDetailsService.saveUser(admin);
         customUserDetailsService.saveUser(ypicker);
         customUserDetailsService.saveUser(user);
-        
+
         IntStream.range(1, 121).forEach(i -> {
             User user_i = new User(
                     "user_" + i,

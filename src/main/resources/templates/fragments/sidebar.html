@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <aside th:fragment="sidebar(active)">
+        <!-- STATIC DESKTOP SIDEBAR -->
+        <div class="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col">
+            <div class="flex flex-grow flex-col overflow-y-auto border-r border-gray-200 bg-white pt-5">
+                <div class="flex flex-shrink-0 items-center px-4">
+                    <img th:src="@{/images/osmocode-logo.png}" alt="Osmocode logo" class="h-8 w-auto">
+                </div>
+                <div class="mt-5 flex flex-grow flex-col">
+                    <nav th:replace="~{fragments/sidebar-nav :: sidebar-nav(${active})}"></nav>
+                </div>
+            </div>
+        </div>
+        <!-- MOBILE SIDEBAR -->
+        <div class="relative z-40 lg:hidden hidden" role="dialog" aria-modal="true">
+            <div class="fixed inset-0 bg-gray-600 bg-opacity-75"></div>
+            <div class="fixed inset-0 z-40 flex">
+                <div class="relative flex w-full max-w-xs flex-1 flex-col bg-white pt-5 pb-4">
+                    <div class="absolute top-0 right-0 -mr-12 pt-2">
+                        <button type="button" class="ml-1 flex h-10 w-10 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                            <span class="sr-only">Close sidebar</span>
+                            <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="flex flex-shrink-0 items-center px-4">
+                        <img th:src="@{/images/osmocode-logo.png}" alt="Osmocode logo" class="h-8 w-auto">
+                    </div>
+                    <div class="mt-5 h-0 flex-1 overflow-y-auto">
+                        <nav th:replace="~{fragments/sidebar-nav :: sidebar-nav(active)}"></nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aside>
+</html>

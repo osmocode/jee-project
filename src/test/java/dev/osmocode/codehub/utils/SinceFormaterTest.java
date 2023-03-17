@@ -11,7 +11,7 @@ class SinceFormaterTest {
     private final static long WEEK_IN_MILLISECOND = 7 * DAY_IN_MILLISECOND;
     private final static long MONTH_IN_MILLISECOND = 30 * DAY_IN_MILLISECOND;
     private final static long YEAR_IN_MILLISECOND = 12 * MONTH_IN_MILLISECOND;
-    
+
     private final SinceFormater sinceFormater = new SinceFormater();
 
     @Test

@@ -76,6 +76,7 @@ public class User {
     public User() {
     }
 
+
     public User(User user) {
         this.username = user.username;
         this.password = user.password;
