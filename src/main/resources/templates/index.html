@@ -1,7 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" class="h-full bg-gray-100">
+<html lang="en"
+      class="h-full"
+      xmlns:th="http://www.thymeleaf.org">
     <head th:replace="~{fragments/head :: head}"></head>
     <body class="h-full">
-        <nav th:replace="~{fragments/nav :: nav}"></nav>
+        <aside th:replace="~{fragments/sidebar :: sidebar('Feed')}"></aside>
+        <div class="flex flex-1 flex-col lg:pl-64">
+            <nav th:replace="~{fragments/nav :: nav}"></nav>
+        </div>
     </body>
 </html>

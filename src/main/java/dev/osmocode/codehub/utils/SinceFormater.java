@@ -14,7 +14,7 @@ public class SinceFormater {
     public String formatSince(long timestamp) {
         return process(System.currentTimeMillis() - timestamp);
     }
-    
+
     String process(long elapsed) {
         if (elapsed < DAY_IN_MILLISECOND) {
             long nbHour = elapsed / HOUR_IN_MILLISECOND;

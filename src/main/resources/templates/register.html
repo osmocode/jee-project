@@ -1,43 +1,68 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <body>
-<div class="container">
-    <form method="post" th:action="@{/register}" th:object="${registrationDto}">
-        <h2>Please register</h2>
-        <p>Create a user account</p>
-        <div th:if="${usernameExists}">
-            An account with this username already exists.
-        </div>
-        <div th:if="${emailExists}">
-            An account with this email already exists.
-        </div>
-        <p>
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" th:field="*{username}" placeholder="Username" required
-                   autofocus/>
-        <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username Error</div>
-        </p>
 
-        <p>
-            <label for="email">Email</label>
-            <input type="text" id="email" name="email" th:field="*{email}" placeholder="Email">
-        </p>
-        <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</div>
-        <p>
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" th:field="*{password}" placeholder="Password" required>
-        <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</div>
-        </p>
-        <p>
-            <label for="confirmation">Password confirmation</label>
-            <input type="password" id="confirmation" name="confirmation" th:field="*{confirmation}"
-                   placeholder="Confirme password" required>
-        </p>
-        <div th:if="${confirmationError}">
-            Password and confirmation are not the same.
+    <div class="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
+        <div class="sm:mx-auto sm:w-full sm:max-w-md">
+            <img class="mx-auto h-12 w-auto" th:src="@{/images/osmocode-logo.png}" alt="Osmocode">
+            <h2 class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">Sign in to your account</h2>
         </div>
-        <button type="submit">Register now</button>
-    </form>
-</div>
+
+        <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+            <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+                <form method="post" th:action="@{/register}" th:object="${registrationDto}" class="space-y-6" >
+                    <div th:if="${usernameExists}">
+                        An account with this username already exists.
+                    </div>
+                    <div th:if="${emailExists}">
+                        An account with this email already exists.
+                    </div>
+
+                    <div>
+                        <label for="username" class="block text-sm font-medium leading-6 text-gray-900">Username</label>
+
+                        <div class="mt-2">
+                            <input id="username" name="username" type="text" th:field="*{username}"  required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        </div>
+                        <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username Error</div>
+                    </div>
+
+                    <div>
+                        <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>
+
+                        <div class="mt-2">
+                            <input id="email" name="email" type="email" th:field="*{email}" autocomplete="email" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        </div>
+                        <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</div>
+                    </div>
+
+                    <div>
+                        <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Password</label>
+                        <div class="mt-2">
+                            <input id="password" name="password" type="password" th:field="*{password}" autocomplete="current-password" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        </div>
+                        <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</div>
+                    </div>
+
+                    <div>
+                        <label for="confirmation" class="block text-sm font-medium leading-6 text-gray-900">Confirmation</label>
+                        <div class="mt-2">
+                            <input id="confirmation" name="confirmation" type="password" th:field="*{confirmation}"  required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        </div>
+                        <div th:if="${confirmationError}">
+                            Password and confirmation are not the same.
+                        </div>
+                    </div>
+
+                    <div>
+                        <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Register</button>
+                    </div>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
