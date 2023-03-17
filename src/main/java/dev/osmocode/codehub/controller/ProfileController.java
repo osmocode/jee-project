@@ -57,6 +57,12 @@ public class ProfileController {
     @GetMapping("/profile/{username}")
     public ModelAndView getProfile(@PathVariable String username) {
         UserProfileDto user = userProfileService.getUserProfile(username);
+        if(user == null)
+        {
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.setViewName("error");
+            return modelAndView;
+        }
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("profile");
         modelAndView.addObject("userDto", user);

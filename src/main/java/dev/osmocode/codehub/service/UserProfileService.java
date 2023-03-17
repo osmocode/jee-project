@@ -27,9 +27,14 @@ public class UserProfileService {
 
     @Transactional
     public UserProfileDto getUserProfile(String username) {
-        User user = repository.findUserFetchingProfile(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        return UserProfileDto.buildFrom(user, sinceFormater);
+        var oprtionalUser = repository.findUserFetchingProfile(username);
+        if (oprtionalUser.isEmpty())
+        {
+            return null;
+        }
+
+                //.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return UserProfileDto.buildFrom(oprtionalUser.get(), sinceFormater);
     }
 
     @Transactional
