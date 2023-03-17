@@ -28,8 +28,8 @@ public class QuestionTagController {
             @RequestParam(value = "offset", required = false) Optional<Integer> optionalOffset,
             @RequestParam(value = "search", required = false) Optional<String> optionalSearch
     ) {
-        var limit = paginationValidator.sanitizeLimit(optionalLimit.orElse(paginationValidator.defaultLimit()));
-        var offset = optionalOffset.orElse(0);
+        var limit = paginationValidator.sanitizeLimit(optionalLimit);
+        var offset = paginationValidator.sanitizeOffset(optionalOffset);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("tags");
         modelAndView.addObject("tagsPage", questionTagService.getTagsBySearch(optionalSearch.orElse(""), limit, offset));

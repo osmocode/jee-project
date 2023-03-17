@@ -12,6 +12,6 @@ public interface QuestionTagRepository extends JpaRepository<QuestionTag, Long> 
 
     QuestionTag findQuestionTagByName(String name);
 
-    @Query("select t from question_tags t where t.name like %:name%")
+    @Query("select t from question_tag t where t.name like %:name%")
     Page<QuestionTag> findQuestionTagByNameLike(String name, Pageable pageable);
 }

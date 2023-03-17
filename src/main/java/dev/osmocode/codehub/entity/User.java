@@ -63,6 +63,13 @@ public class User {
             mappedBy = "target"
     )
     private Set<UserScore> attributedScores;
+    
+
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "interviewer"
+    )
+    private Set<Question> questions;
 
 
     @OneToMany(

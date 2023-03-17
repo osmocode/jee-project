@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<form method="post" th:action="@{/question/ask}" th:object="${questionAskedDto}">
+    <h2>Ask a question</h2>
+
+    <!--QUESTION TITLE-->
+    <p>
+        <label for="title">Title</label>
+        <input type="text" id="title" name="title" th:field="*{title}" placeholder="Title" required autofocus/>
+    <div th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title Error</div>
+    </p>
+
+    <!--QUESTION BODY-->
+    <p>
+        <label for="body">Body</label>
+        <input type="text" id="body" name="body" th:field="*{body}" placeholder="Body">
+    <div th:if="${#fields.hasErrors('body')}" th:errors="*{body}">Body Error</div>
+    </p>
+
+    <!--SEARCH TAGS-->
+    <label for="search"></label>
+    <input type="search" id="search" name="search" placeholder="Search tags">
+
+    <!--QUESTION TAGS-->
+    <div th:each="tag : ${questionTags}">
+        <input type="checkbox" th:name="selectedTags" th:value="${tag.getId()}" unchecked>
+        <label th:text="${tag.getName()}"></label>
+    </div>
+
+    <!--SUBMIT-->
+    <button type="submit">Submit question</button>
+</form>
+
+</body>
+</html>

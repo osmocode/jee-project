@@ -35,27 +35,29 @@ public class PopulateDB implements CommandLineRunner {
         populateTags();
     }
 
-    private void populateUser(int number) {
+    private void populateUser(int number) throws InterruptedException {
         Authority roleUser = authorityService.findAuthorityByName(Role.USER.name());
-        IntStream.range(0, number).forEach(i -> {
-            new Thread(() -> {
-                User user_i = new User(
-                        "user_" + i,
-                        passwordEncoder.encode("password"),
-                        "user_" + i + "@uge-overflow.com",
-                        roleUser
-                );
-                userService.saveUser(user_i);
-            }).start();
-        });
+        List<Thread> users = IntStream.range(0, number).mapToObj(i -> new Thread(() -> {
+            User user_i = new User(
+                    "user_" + i,
+                    passwordEncoder.encode("password"),
+                    "user_" + i + "@uge-overflow.com",
+                    roleUser
+            );
+            userService.saveUser(user_i);
+        })).toList();
+        users.forEach(Thread::start);
+        for (Thread user : users) {
+            user.join();
+        }
         System.out.println(number + " more users created");
     }
 
     private void populateTags() {
 
-        List<String> tags = List.of("java", "jee", "oop", "sql", "jpql", "spring", "spring-security", "spring-data", 
-                "spring-mvc", "algorithm", "system","functional-programming", "mobile-programming", "devops", "bdd", 
-                "c", "python", "scala", "ocaml", "rust", "android", "angular", "reactjs", "vuejs", "javascript", "html",
+        List<String> tags = List.of("java", "jee", "oop", "sql", "jpql", "spring", "spring-security", "spring-data",
+                "spring-mvc", "algorithm", "system", "functional-programming", "mobile-programming", "devops", "bdd",
+                "c", "python", "scala", "ocaml", "rust", "android", "angular", "reactjs", "vueJS", "javascript", "html",
                 "css", "c", "c++", "haskell", "c#", "kotlin", "jetpack-compose", "jquery", "mysql", "sqlite", "nodejs");
         tags.forEach(s -> questionTagService.addQuestionTag(new QuestionTag(s)));
         System.out.println("Some question tags created");
