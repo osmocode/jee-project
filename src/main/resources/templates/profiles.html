@@ -22,54 +22,11 @@
                                th:href="@{/profile/{username} (username=${user.username()})}"
                             >Open profile &rarr;</a>
                         </li>
-
                     </ul>
                 </div>
-                </br>
-                <div class="mx-auto max-w-7xl px-6 text-center lg:px-8">
-                    <nav class="flex items-center justify-between  px-4 sm:px-0">
-                        <div class="-mt-px flex w-0 flex-1">
-                            <a th:href="@{/profiles?offset={offset}&limit={limit}(offset=${profilesPage.number - 1},
-                            limit=${profilesPage.size})}" class="inline-flex items-center border-t-2 border-transparent pt-4 pr-1 text-sm font-medium text-gray-500 hover:text-gray-300">
-                                <svg class="mr-3 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                    <path fill-rule="evenodd" d="M18 10a.75.75 0 01-.75.75H4.66l2.1 1.95a.75.75 0 11-1.02 1.1l-3.5-3.25a.75.75 0 010-1.1l3.5-3.25a.75.75 0 111.02 1.1l-2.1 1.95h12.59A.75.75 0 0118 10z" clip-rule="evenodd" />
-                                </svg>
-                                Previous
-                            </a>
-                        </div>
-                        <div th:each="pageNumber : ${#numbers.sequence(0, profilesPage.totalPages - 1)}"
-                             th:classappend="${profilesPage.number == pageNumber} ? active" class="hidden md:-mt-px md:flex">
-                            <a th:href="@{/profiles?offset={offset}&limit={limit}(offset=${pageNumber}, limit=${profilesPage.size})}"
-                               th:text="${pageNumber + 1}" class="inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-500  hover:text-gray-300"></a>
-                        </div>
-                        <div th:if="${profilesPage.number != profilesPage.totalPages - 1}" class="-mt-px flex w-0 flex-1 justify-end">
-                            <a th:href="@{/profiles?offset={offset}&limit={limit}(offset=${profilesPage.number + 1}, limit=${profilesPage.size})}" class="inline-flex items-center border-t-2 border-transparent pt-4 pl-1 text-sm font-medium text-gray-500  hover:text-gray-300">
-                                Next
-                                <svg class="ml-3 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                    <path fill-rule="evenodd" d="M2 10a.75.75 0 01.75-.75h12.59l-2.1-1.95a.75.75 0 111.02-1.1l3.5 3.25a.75.75 0 010 1.1l-3.5 3.25a.75.75 0 11-1.02-1.1l2.1-1.95H2.75A.75.75 0 012 10z" clip-rule="evenodd" />
-                                </svg>
-                            </a>
-                        </div>
-                    </nav>
-                </div>
-                </br>
-                <div class="mx-auto max-w-7xl px-6 text-center lg:px-8">
-                    <a th:href="@{/profiles?offset={offset}&limit={limit}(offset=0, limit=15)}"
-                       th:classappend="${profilesPage.size == 15} ? 'active' : ''"
-                       class="inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-500 hover:text-gray-300"
-                    >15</a>
-                    <a th:href="@{/profiles?offset={offset}&limit={limit}(offset=0, limit=30)}"
-                       th:classappend="${profilesPage.size == 30} ? 'active' : ''"
-                       class="inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-500 hover:text-gray-300"
-                    >30</a>
-                    <a th:href="@{/profiles?offset={offset}&limit={limit}(offset=0, limit=50)}"
-                       th:classappend="${profilesPage.size == 50} ? 'active' : ''"
-                       class="inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-500 hover:text-gray-300"
-                    >50</a>
+                <div th:replace="~{fragments/pagination :: pagination('/profiles', ${profilesPage.number}, ${profilesPage.totalPages}, ${profilesPage.size})}">
                 </div>
             </div>
-
-
         </div>
     </body>
 </html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<div class="mx-auto max-w-7xl px-6 text-center lg:px-8"
+     th:fragment="pagination(url, current, size, limit)">
+    <nav class="flex items-center justify-between  px-4 sm:px-0 ">
+
+        <!-- PREVIOUS BUTTON -->
+        <div class="-mt-px flex w-0 flex-1 py-12">
+            <a th:href="@{/profiles?offset={offset}&limit={limit}(offset=${current - 1},limit=${limit})}"
+               th:classappend="${!(current >=  1)} ? 'hidden'"
+               class="inline-flex items-center border-t-2 border-transparent pt-4 pr-1 text-sm font-medium text-gray-500 hover:text-gray-300">
+                <svg class="mr-3 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M18 10a.75.75 0 01-.75.75H4.66l2.1 1.95a.75.75 0 11-1.02 1.1l-3.5-3.25a.75.75 0 010-1.1l3.5-3.25a.75.75 0 111.02 1.1l-2.1 1.95h12.59A.75.75 0 0118 10z" clip-rule="evenodd" />
+                </svg>
+                Previous
+            </a>
+        </div>
+        <th:block th:if="${size <= 7}">
+            <div class="hidden md:-mt-px md:flex"
+                 th:each="page : ${#numbers.sequence(0, size - 1)}"
+                 th:classappend="${page == current} ? 'border-sky-500 text-sky-600':'border-transparent text-gray-500 hover:text-gray-700 '">
+                <a
+                        th:href="@{/profiles?offset={offset}&limit={limit}(offset=${page}, limit=${limit})}"
+                        th:text="${page +1}"
+                        class="inline-flex items-center px-4 pt-4 text-sm font-medium "
+                ></a>
+            </div>
+        </th:block>
+        <th:block th:unless="${size <= 7}">
+            <th:block th:if="${current <= 3} ">
+                <div class="hidden md:-mt-px md:flex"
+                     th:each="page : ${#numbers.sequence(0, 6)}"
+                     th:classappend="${page == current} ? 'border-sky-500 text-sky-600':'border-transparent text-gray-500 hover:text-gray-700 '">
+                    <a
+                            th:href="@{/profiles?offset={offset}&limit={limit}(offset=${page}, limit=${limit})}"
+                            th:text="${page + 1}"
+                            class="inline-flex items-center px-4 pt-4 text-sm font-medium "
+                    ></a>
+                </div>
+            </th:block>
+            <th:block th:if="${current >= size - 2} ">
+                <div class="hidden md:-mt-px md:flex"
+                     th:each="page : ${#numbers.sequence(size - 6, size - 1)}"
+                     th:classappend="${page == current} ? 'border-sky-500 text-sky-600':'border-transparent text-gray-500 hover:text-gray-700 '">
+                    <a
+                            th:href="@{/profiles?offset={offset}&limit={limit}(offset=${page}, limit=${limit})}"
+                            th:text="${page + 1}"
+                            class="inline-flex items-center px-4 pt-4 text-sm font-medium "
+                    ></a>
+                </div>
+            </th:block>
+            <th:block th:if="${current > 3 and current < size - 2} ">
+                <div class="hidden md:-mt-px md:flex"
+                     th:each="page : ${#numbers.sequence(current - 3, ((current + 3) >= size) ? (current + 2) : (current + 3))}"
+                     th:classappend="${page == current} ? 'border-sky-500 text-sky-600':'border-transparent text-gray-500 hover:text-gray-700 '">
+                    <a
+                            th:href="@{/profiles?offset={offset}&limit={limit}(offset=${page}, limit=${limit})}"
+                            th:text="${page + 1}"
+                            class="inline-flex items-center px-4 pt-4 text-sm font-medium "
+                    ></a>
+                </div>
+            </th:block>
+        </th:block>
+
+
+
+       <!-- NEXT BUTTON -->
+        <div class="-mt-px flex w-0 flex-1 justify-end " >
+            <a th:href="@{/profiles?offset={offset}&limit={limit}(offset=${current + 1},limit=${limit})}"
+               th:classappend="${!(current < size - 1)} ? 'hidden'"
+               class="inline-flex items-center border-t-2 border-transparent pt-4 pr-1 text-sm font-medium text-gray-500 hover:text-gray-300 ">
+                Next
+                <svg class="ml-3 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M2 10a.75.75 0 01.75-.75h12.59l-2.1-1.95a.75.75 0 111.02-1.1l3.5 3.25a.75.75 0 010 1.1l-3.5 3.25a.75.75 0 11-1.02-1.1l2.1-1.95H2.75A.75.75 0 012 10z" clip-rule="evenodd" />
+                </svg>
+            </a>
+        </div>
+
+    </nav>
+
+    <div class="mx-auto max-w-7xl px-6 text-center lg:px-8">
+        <p class="text-sm text-gray-500">
+            Showing
+        <a th:href="@{/profiles?offset={offset}&limit={limit}(offset=0, limit=15)}"
+           th:classappend="${limit == 15} ? 'border-sky-500 text-sky-600':'border-transparent text-gray-500 hover:text-gray-700 ' "
+           class="inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-500 hover:text-gray-300"
+        >15</a>
+        <a th:href="@{/profiles?offset={offset}&limit={limit}(offset=0, limit=30)}"
+           th:classappend="${limit == 30} ? 'border-sky-500 text-sky-600':'border-transparent text-gray-500 hover:text-gray-700 '"
+           class="inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-500 hover:text-gray-300"
+        >30</a>
+        <a th:href="@{/profiles?offset={offset}&limit={limit}(offset=0, limit=50)}"
+           th:classappend="${limit == 50} ? 'border-sky-500 text-sky-600':'border-transparent text-gray-500 hover:text-gray-700 '"
+           class="inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-500 hover:text-gray-300"
+        >50</a>
+            results per page
+        </p>
+    </div>
+</div>
+</html>
