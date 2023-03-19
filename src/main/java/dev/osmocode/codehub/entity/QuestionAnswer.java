@@ -3,6 +3,8 @@ package dev.osmocode.codehub.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 
+import java.util.Set;
+
 @Entity(name = "question_answer")
 public class QuestionAnswer {
 
@@ -31,6 +33,12 @@ public class QuestionAnswer {
             inverseJoinColumns = @JoinColumn(name = "question_id")
     )
     private Question question;
+
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "answer"
+    )
+    private Set<AnswerScore> scores;
 
     public QuestionAnswer() {}
 
@@ -70,5 +78,13 @@ public class QuestionAnswer {
 
     public void setQuestion(Question question) {
         this.question = question;
+    }
+
+    public Set<AnswerScore> getScores() {
+        return scores;
+    }
+
+    public void setScores(Set<AnswerScore> scores) {
+        this.scores = scores;
     }
 }

@@ -83,7 +83,7 @@
                                         </div>
                                         <ul role="list" class="divide-y divide-gray-200">
                                             <li class="py-4" th:each="answer: ${answers}">
-                                                <form method="POST" th:action="@{/question/{id}/vote (id=${question.id})}" th:object="${questionAnswerVoteDto}" id="vote" data-turbo="false">
+                                                <form method="POST" th:action="@{/answer/{id}/vote (id=${answer.id})}" th:object="${questionAnswerVoteDto}" id="vote" data-turbo="false">
                                                     <input name="questionId" th:value="${question.id}" type="hidden">
                                                     <input name="answerId" th:value="${answer.id}" type="hidden">
                                                     <div class="flex flex-row gap-x-6">

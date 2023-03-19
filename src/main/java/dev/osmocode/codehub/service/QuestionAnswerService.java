@@ -10,6 +10,7 @@ import dev.osmocode.codehub.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -35,6 +36,11 @@ public class QuestionAnswerService {
     }
 
     @Transactional
+    public Optional<QuestionAnswer> findById(long id){
+        return repository.findById(id);
+    }
+
+    @Transactional
     public void performAnswerQuestion(QuestionAnswerDto questionAnswerDto, String username, long id) {
         User user = userRepository.findByUsername(username).orElse(null);
         if (user == null) return;
@@ -45,5 +51,10 @@ public class QuestionAnswerService {
         repository.save(new QuestionAnswer(
                 questionAnswerDto.getBody(), user, question
         ));
+    }
+
+    @Transactional
+    public int calculateScoreById(long id){
+        return repository.calculateScoresById(id);
     }
 }

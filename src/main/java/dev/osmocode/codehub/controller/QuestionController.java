@@ -2,6 +2,7 @@ package dev.osmocode.codehub.controller;
 
 import dev.osmocode.codehub.dto.QuestionAnswerDto;
 import dev.osmocode.codehub.dto.QuestionAnswerVoteDto;
+import dev.osmocode.codehub.entity.AnswerScore;
 import dev.osmocode.codehub.repository.UserRepository;
 import dev.osmocode.codehub.service.AnswerScoreService;
 import dev.osmocode.codehub.service.QuestionAnswerService;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Optional;
+import java.util.Set;
 
 @Controller
 public class QuestionController {
@@ -85,24 +87,4 @@ public class QuestionController {
         modelAndView.setViewName("redirect:/question/" + id);
         return modelAndView;
     }
-
-    @PostMapping("/question/{id}/vote")
-    public ModelAndView postAnswerVote(
-            Authentication authentication,
-            @PathVariable long id,
-            @Valid @ModelAttribute("questionAnswerVoteDto") QuestionAnswerVoteDto questionAnswerVoteDto,
-            BindingResult bindingResult
-    ){
-        ModelAndView modelAndView = new ModelAndView();
-
-        if(bindingResult.hasErrors() || null == authentication){
-            modelAndView.setViewName("error");
-            return modelAndView;
-        }
-
-        answerScoreService.performAnswerAddScore(questionAnswerVoteDto, authentication.getName());
-        modelAndView.setViewName("redirect:/question/" + id);
-        return modelAndView;
-    }
-
 }
