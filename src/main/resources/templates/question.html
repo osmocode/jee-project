@@ -68,7 +68,6 @@
                                 <script th:inline="javascript">
                                     /*<![CDATA[*/
                                     var content = /*[[${question.body}]]*/ 'default';
-                                    console.log(content);
                                     document.getElementById('content').innerHTML =
                                         marked.parse(content);
                                     /*]]>*/
