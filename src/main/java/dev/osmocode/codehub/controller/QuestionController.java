@@ -57,6 +57,7 @@ public class QuestionController {
     public ModelAndView getQuestion(@PathVariable long id) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("question");
+        modelAndView.addObject("questionAnswerDto", new QuestionAnswerDto());
         modelAndView.addObject("question", questionService.findQuestionById(id));
         modelAndView.addObject("answers", questionAnswerService.findAnswersById(id));
         return modelAndView;
