@@ -9,6 +9,14 @@ public class QuestionAskedDto {
 
     @Size(max = 30_000)
     private String body;
+    
+    public QuestionAskedDto() {
+    }
+
+    public QuestionAskedDto(String title, String body) {
+        this.title = title;
+        this.body = body;
+    }
 
     public String getTitle() {
         return title;
