@@ -32,12 +32,10 @@
                                 <div class="flex flex-col">
                                     <a th:href="'/question/' + ${question.id}" class="text-2xl font-semibold text-gray-900" th:text="${question.title}">Title</a>
                                     <p class="mt-1 max-w-2xl text-sm text-gray-500">Tags</p>
-                                    <div class="flex flex-1 flex-wrap gap-2 mt-2">
-                                        <span class="inline-flex items-center rounded bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-800">beta</span>
-                                        <span class="inline-flex items-center rounded bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-800">java</span>
-                                        <span class="inline-flex items-center rounded bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-800">javascript</span>
-                                        <span class="inline-flex items-center rounded bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-800">css</span>
-                                        <span class="inline-flex items-center rounded bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-800">html</span>
+                                    <div class="flex flex-1 flex-wrap gap-2 mt-2" >
+                                        <span class="inline-flex items-center rounded bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-800"
+                                              th:each="tag: ${question.tags}"
+                                              th:text="${tag.name}">beta</span>
                                     </div>
                                 </div>
                             </article>
