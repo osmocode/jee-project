@@ -63,6 +63,7 @@ public class QuestionController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("question");
         modelAndView.addObject("questionAnswerDto", new QuestionAnswerDto());
+        modelAndView.addObject("questionAnswerVoteDto", new QuestionAnswerVoteDto());
         modelAndView.addObject("question", questionService.findQuestionById(id));
         modelAndView.addObject("answers", questionAnswerService.findAnswersById(id));
         return modelAndView;

@@ -4,6 +4,7 @@ import dev.osmocode.codehub.dto.QuestionAnswerVoteDto;
 import dev.osmocode.codehub.entity.AnswerScore;
 import dev.osmocode.codehub.entity.QuestionAnswer;
 import dev.osmocode.codehub.entity.User;
+import dev.osmocode.codehub.entity.VoteType;
 import dev.osmocode.codehub.repository.AnswerScoreRepository;
 import dev.osmocode.codehub.repository.QuestionAnswerRepository;
 import dev.osmocode.codehub.repository.UserRepository;
@@ -29,7 +30,12 @@ public class AnswerScoreService {
     @Transactional
     public void performAnswerAddScore(QuestionAnswerVoteDto questionAnswerVoteDto, String assignerName){
         repository.findByAnswerIdAndAssignerUsername(questionAnswerVoteDto.getAnswerId(), assignerName).ifPresentOrElse(
-            a -> a.setVote(questionAnswerVoteDto.getVote()),
+            a -> {
+                var type = VoteType.fromString(questionAnswerVoteDto.getVote());
+                if (type != null) {
+                    a.setVote(type);
+                }
+            },
             () -> {
                 User assigner = userRepository.findByUsername(assignerName).orElse(null);
                 if(null == assigner) return;
@@ -37,7 +43,10 @@ public class AnswerScoreService {
                 QuestionAnswer questionAnswer = questionAnswerRepository.findById(questionAnswerVoteDto.getAnswerId()).orElse(null);
                 if(null == questionAnswer) return;
 
-                repository.save(new AnswerScore(questionAnswer, assigner, questionAnswerVoteDto.getVote()));
+                var type = VoteType.fromString(questionAnswerVoteDto.getVote());
+                if(null == type) return;
+
+                repository.save(new AnswerScore(questionAnswer, assigner, type));
             }
         );
     }
