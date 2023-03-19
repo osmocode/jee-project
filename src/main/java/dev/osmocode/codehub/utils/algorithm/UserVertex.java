@@ -10,9 +10,13 @@ import java.util.Map;
 public class UserVertex {
     private final String label; //username
     private final Map<UserVertex, Integer> neighbors = new HashMap<>();
+    
+    private final Object lock = new Object();
 
     public UserVertex(String label) {
-        this.label = label;
+        synchronized (lock) {
+            this.label = label;
+        }
     }
 
     @Override
@@ -20,30 +24,42 @@ public class UserVertex {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserVertex that = (UserVertex) o;
-        return label.equals(that.label);
+        synchronized (lock) {
+            return label.equals(that.label);
+        }
     }
 
     @Override
     public int hashCode() {
-        return label.hashCode();
+        synchronized (lock) {
+            return label.hashCode();
+        }
     }
 
     public String getLabel() {
-        return label;
+        synchronized (lock) {
+            return label;
+        }
     }
 
     public Map<UserVertex, Integer> getNeighbors() {
-        return neighbors;
+        synchronized (lock) {
+            return neighbors;
+        }
     }
 
     public void updateScore(UserVertex vertex, int score) {
-        neighbors.put(vertex, score);
+        synchronized (lock) {
+            neighbors.put(vertex, score);
+        }
     }
 
     public void removeNeighbor(UserVertex vertex) {
-        if (!neighbors.containsKey(vertex)) {
-            throw new IllegalStateException("Vertices are not connected");
+        synchronized (lock) {
+            if (!neighbors.containsKey(vertex)) {
+                throw new IllegalStateException("Vertices are not connected");
+            }
+            neighbors.remove(vertex);
         }
-        neighbors.remove(vertex);
     }
 }

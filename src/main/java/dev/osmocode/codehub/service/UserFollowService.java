@@ -19,33 +19,35 @@ public class UserFollowService {
     }
 
     @Transactional
-    public void performUserFollow(String actorName, String targetName) {
+    public boolean performUserFollow(String actorName, String targetName) {
         User actor = userTools.findByUsernameOrElseThrow(actorName);
         User target = userTools.findByUsernameOrElseThrow(targetName);
         if (actor == target) {
-            return;
+            return false;
         }
         if (actor.getFollowings().contains(target)) {
-            return;
+            return false;
         }
         actor.follow(target);
+        return true;
     }
 
     @Transactional
-    public void performUserUnfollow(String actorName, String targetName) {
+    public boolean performUserUnfollow(String actorName, String targetName) {
         User actor = userTools.findByUsernameOrElseThrow(actorName);
         User target = userTools.findByUsernameOrElseThrow(targetName);
         if (actor == target) {
-            return;
+            return false;
         }
         if (!actor.getFollowings().contains(target)) {
-            return;
+            return false;
         }
         UserScore userScore = userTools.getScoreWithVerification(actor, target);
         if (null != userScore) {
             userScoreRepository.delete(userScore);
         }
         actor.unfollow(target);
+        return true;
     }
     
 }
