@@ -118,7 +118,6 @@
                                         </div>
                                     </form>
 
-
                                     <form method="post" th:action="@{/profile/{username}/unfollow (username=${userDto.username()})}">
                                         <div class="justify-stretch mt-6 flex flex-col space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
                                             <button type="submit" class="inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
@@ -209,7 +208,6 @@
                     <div class="pb-6 rounded-xl shadow mt-12 py-4 px-8">
                         <div class="border-b border-gray-200">
                             <nav class="-mb-px flex space-x-8" aria-label="Tabs">
-                                <!-- Current: "border-indigo-500 text-indigo-600", Default: "border-transparent text-gray-500 hover:border-gray-200 hover:text-gray-700" -->
                                 <a data-target="#tab-overview"
                                    class="tab border-indigo-500 text-indigo-600 flex whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium is-active">
                                     Overview
@@ -218,48 +216,53 @@
                                 <a data-target="#tab-followers"
                                    class="tab border-transparent text-gray-500 hover:border-gray-200 hover:text-gray-700 flex whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium">
                                     Followers
-                                    <span class="bg-gray-100 text-gray-900 ml-3 hidden rounded-full py-0.5 px-2.5 text-xs font-medium md:inline-block">6</span>
                                 </a>
 
                                 <a data-target="#tab-following"
                                    class="tab border-transparent text-gray-500 hover:border-gray-200 hover:text-gray-700 flex whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium">
                                     Following
-                                    <span class="bg-gray-100 text-gray-900 ml-3 hidden rounded-full py-0.5 px-2.5 text-xs font-medium md:inline-block">4</span>
                                 </a>
                             </nav>
                         </div>
 
                         <div class="tab-content">
-                            <div class="tab-panel flex bg-gray-100 is-active" id="tab-overview">
+                            <div class="tab-panel flex bg-gray-100" id="tab-overview">
+
                                 <h1>Overview</h1>
                             </div>
 
-                            <div class="tab-panel flex bg-gray-100" id="tab-followers">
-                                <h1>Followers</h1>
+                            <div class="tab-panel flex hidden" id="tab-followers">
+                                <turbo-frame id="followers" th:src="'/profile/' + ${userDto.username()} + '/followers'" loading="lazy" class="w-full"></turbo-frame>
                             </div>
 
-                            <div class="tab-panel flex bg-gray-100" id="tab-following">
-                                <h1>Following</h1>
+                            <div class="tab-panel flex hidden" id="tab-following">
+                                <turbo-frame id="followings" th:src="'/profile/' + ${userDto.username()} + '/followings'" loading="lazy" class="w-full"></turbo-frame>
                             </div>
                         </div>
                     </div>
 
                     <script>
-                        const tabs = document.querySelectorAll('.tab');
-                        const tabContent = document.querySelectorAll('.tab-panel');
+                        let tabs = document.querySelectorAll('.tab');
+                        let tabContent = document.querySelectorAll('.tab-panel');
 
                         tabs.forEach((tab) => {
                             tab.addEventListener('click', () => {
                                 const target = document.querySelector(tab.dataset.target);
 
                                 tabContent.forEach((tc) => {
-                                    tc.classList.remove('hidden');
+                                    tc.classList.add('hidden');
                                 });
-                                tabs.forEach((t) => {
-                                    t.classList.remove('hidden');
+
+                                target.classList.remove('hidden');
+
+                                tabs.forEach((tab) => {
+                                    tab.classList.remove("border-indigo-500", "text-indigo-600");
+                                    tab.classList.add("border-transparent", "text-gray-500", "hover:border-gray-300", "hover:text-gray-700");
                                 });
-                                tab.classList.add('hidden');
-                                target.classList.add('hidden');
+
+                                tab.classList.remove("border-transparent", "text-gray-500", "hover:border-gray-300", "hover:text-gray-700");
+                                tab.classList.add("border-indigo-500", "text-indigo-600");
+
                             });
                         });
                     </script>

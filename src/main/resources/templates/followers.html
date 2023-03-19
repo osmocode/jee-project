@@ -6,7 +6,7 @@
     <body class="h-full">
         <h1>Followers page</h1>
 
-        <div>
+        <turbo-frame id="followers">
             <div class="mt-6 flow-root">
                 <ul th:each="user : ${followersPage}"
                     role="list"
@@ -17,12 +17,10 @@
                                 <svg class="h-8 w-8 mx-auto rounded-full bg-gray-200" th:data-jdenticon-value="${user.username()}"></svg>
                             </div>
                             <div class="min-w-0 flex-1">
-                                <p
-                                        th:text="${user.username()}"
-                                        class="truncate text-sm font-medium text-gray-900"></p>
+                                <p th:text="${user.username()}" class="truncate text-sm font-medium text-gray-900"></p>
                             </div>
                             <div>
-                                <a th:href="@{/profile/{username} (username=${user.username()})}" class="inline-flex items-center  px-2.5 py-1 text-xs  text-gray-900 shadow-sm  hover:bg-gray-50">View &rarr;</a>
+                                <a th:href="@{/profile/{username} (username=${user.username()})}" class="inline-flex items-center px-2.5 py-1 text-xs  text-gray-900 shadow-sm  hover:bg-gray-50">View &rarr;</a>
                             </div>
                         </div>
                     </li>
@@ -30,7 +28,7 @@
                 <div th:replace="~{fragments/pagination :: pagination('/profile/' + ${currentProfileName} + '/followers', ${followersPage.number},${followersPage.totalPages}, ${followersPage.size})}">
                 </div>
             </div>
-        </div>
+        </turbo-frame>
     </body>
 </html>
 

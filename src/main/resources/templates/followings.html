@@ -11,7 +11,7 @@
 <!--            <li><a th:href="@{/profile/{username} (username=${user.username()})}">Open profile &rarr;</a></li>-->
 <!--        </ul>-->
 
-        <div>
+        <turbo-frame id="followings">
             <div class="mt-6 flow-root">
                 <ul th:each="user : ${followingsPage}"
                     role="list"
@@ -35,7 +35,7 @@
                 <div th:replace="~{fragments/pagination :: pagination('/profile/' + ${currentProfileName} + '/followings', ${followingsPage.number},${followingsPage.totalPages}, ${followingsPage.size})}">
                 </div>
             </div>
-        </div>
+        </turbo-frame>
 
     </body>
 </html>
