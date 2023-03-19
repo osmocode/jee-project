@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * Class representing a user vertex in the graph
  */
-public class UserVertex implements Comparable<UserVertex> {
+public class UserVertex {
     private final String label; //username
     private final Map<UserVertex, Integer> neighbors = new HashMap<>();
 
@@ -45,10 +45,5 @@ public class UserVertex implements Comparable<UserVertex> {
             throw new IllegalStateException("Vertices are not connected");
         }
         neighbors.remove(vertex);
-    }
-
-    @Override
-    public int compareTo(UserVertex o) {
-        return label.compareTo(o.getLabel());
     }
 }
