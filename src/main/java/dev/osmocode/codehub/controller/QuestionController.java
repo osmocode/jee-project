@@ -1,6 +1,7 @@
 package dev.osmocode.codehub.controller;
 
 import dev.osmocode.codehub.dto.QuestionAnswerDto;
+import dev.osmocode.codehub.dto.QuestionAnswerVoteDto;
 import dev.osmocode.codehub.repository.UserRepository;
 import dev.osmocode.codehub.service.AnswerScoreService;
 import dev.osmocode.codehub.service.QuestionAnswerService;
@@ -88,33 +89,17 @@ public class QuestionController {
     public ModelAndView postAnswerVote(
             Authentication authentication,
             @PathVariable long id,
-            @RequestParam(name = "vote") char vote
+            @Valid @ModelAttribute("questionAnswerVoteDto") QuestionAnswerVoteDto questionAnswerVoteDto,
+            BindingResult bindingResult
     ){
         ModelAndView modelAndView = new ModelAndView();
 
-        if(null == authentication){
+        if(bindingResult.hasErrors() || null == authentication){
             modelAndView.setViewName("error");
             return modelAndView;
         }
 
-        answerScoreService.performAnswerAddScore(id, authentication.getName(), vote);
-        modelAndView.setViewName("redirect:/question/" + id);
-        return modelAndView;
-    }
-
-    @PostMapping("/question/{id}/delete-vote")
-    public ModelAndView postAnswerDeleteVote(
-            Authentication authentication,
-            @PathVariable long id
-    ){
-        ModelAndView modelAndView = new ModelAndView();
-
-        if(null == authentication){
-            modelAndView.setViewName("error");
-            return modelAndView;
-        }
-
-        answerScoreService.performAnswerDeleteScore(id, authentication.getName());
+        answerScoreService.performAnswerAddScore(questionAnswerVoteDto, authentication.getName());
         modelAndView.setViewName("redirect:/question/" + id);
         return modelAndView;
     }

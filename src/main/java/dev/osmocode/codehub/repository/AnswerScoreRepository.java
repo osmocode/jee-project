@@ -11,5 +11,4 @@ public interface AnswerScoreRepository  extends CrudRepository<AnswerScore, Long
 
     Optional<AnswerScore> findByAnswerIdAndAssignerUsername(long id, String assignerUsername);
 
-    void deleteAnswerScoreByAnswerIdAndAssignerUsername(long id, String assignerUsername);
 }

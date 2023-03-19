@@ -1,10 +1,12 @@
 package dev.osmocode.codehub.service;
 
+import dev.osmocode.codehub.dto.QuestionAnswerVoteDto;
 import dev.osmocode.codehub.entity.AnswerScore;
 import dev.osmocode.codehub.entity.QuestionAnswer;
 import dev.osmocode.codehub.entity.User;
 import dev.osmocode.codehub.repository.AnswerScoreRepository;
 import dev.osmocode.codehub.repository.QuestionAnswerRepository;
+import dev.osmocode.codehub.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -15,36 +17,28 @@ public class AnswerScoreService {
 
     private final QuestionAnswerRepository questionAnswerRepository;
 
-    private final UserToolsFunction userTools;
+    private final UserRepository userRepository;
 
-    public AnswerScoreService(AnswerScoreRepository repository, UserToolsFunction userTools, QuestionAnswerRepository questionAnswerRepository) {
+    public AnswerScoreService(AnswerScoreRepository repository, UserRepository userRepository, QuestionAnswerRepository questionAnswerRepository) {
         this.repository = repository;
-        this.userTools = userTools;
+        this.userRepository = userRepository;
         this.questionAnswerRepository = questionAnswerRepository;
     }
 
 
     @Transactional
-    public void performAnswerAddScore(long id, String assignerName, char vote){
-        repository.findByAnswerIdAndAssignerUsername(id, assignerName).ifPresentOrElse(
-            a -> a.setVote(vote),
+    public void performAnswerAddScore(QuestionAnswerVoteDto questionAnswerVoteDto, String assignerName){
+        repository.findByAnswerIdAndAssignerUsername(questionAnswerVoteDto.getAnswerId(), assignerName).ifPresentOrElse(
+            a -> a.setVote(questionAnswerVoteDto.getVote()),
             () -> {
-                User assigner = userTools.findByUsernameOrElseThrow(assignerName);
-                QuestionAnswer questionAnswer = questionAnswerRepository.findQuestionAnswerById(id);
-                repository.save(new AnswerScore(questionAnswer, assigner, vote));
+                User assigner = userRepository.findByUsername(assignerName).orElse(null);
+                if(null == assigner) return;
+
+                QuestionAnswer questionAnswer = questionAnswerRepository.findById(questionAnswerVoteDto.getAnswerId()).orElse(null);
+                if(null == questionAnswer) return;
+
+                repository.save(new AnswerScore(questionAnswer, assigner, questionAnswerVoteDto.getVote()));
             }
         );
     }
-
-
-    @Transactional
-    public void performAnswerDeleteScore(long id, String assignerName){
-        repository.deleteAnswerScoreByAnswerIdAndAssignerUsername(id, assignerName);
-    }
-
-    @Transactional
-    public void performAnswerUpdateScore(long id, String assignerName, char vote){
-        repository.findByAnswerIdAndAssignerUsername(id, assignerName).ifPresent(a -> a.setVote(vote));
-    }
-
 }
