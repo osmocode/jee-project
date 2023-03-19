@@ -11,6 +11,8 @@ import java.util.Set;
 public interface QuestionAnswerRepository extends JpaRepository<QuestionAnswer, Long> {
 
     @Query("SELECT a FROM question_answer a WHERE a.question.id=:id")
-    Set<QuestionAnswer> findQuestionAnswerById(long id);
+    Set<QuestionAnswer> findQuestionAnswerByQuestionId(long id);
+
+    QuestionAnswer findQuestionAnswerById(long id);
 
 }
