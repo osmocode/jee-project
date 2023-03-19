@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en"
       class="h-full"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head th:replace="~{fragments/head :: head}"></head>
     <body class="h-full">
         <aside th:replace="~{fragments/sidebar :: sidebar('Questions')}"></aside>
@@ -68,18 +69,43 @@
                                         <div class="pb-4">
                                             <h2 id="answers-title" class="text-lg font-medium text-gray-900">Answers</h2>
                                         </div>
-                                        <div class="pt-6">
-                                            <!-- Activity feed-->
-                                            <ul role="list" class="divide-y divide-gray-200">
-                                                <li class="py-4" th:each="answer: ${answers}">
-                                                    <span th:text="${answer.body}"></span>
-                                                </li>
-                                            </ul>
-                                        </div>
+                                        <ul role="list" class="divide-y divide-gray-200">
+                                            <li class="py-4" th:each="answer: ${answers}">
+                                                <form method="POST" th:action="@{/question/{id}/vote (id=${question.id})}" th:object="${questionAnswerVoteDto}" id="vote" data-turbo="false">
+                                                    <input name="questionId" th:value="${question.id}" type="hidden">
+                                                    <input name="answerId" th:value="${answer.id}" type="hidden">
+                                                    <div class="flex flex-row gap-x-6">
+                                                        <div class="flex flex-col text-center">
+                                                            <button type="submit" class="w-full" name="vote" value="+">
+                                                                <svg aria-hidden="true" width="36" height="36" viewBox="0 0 36 36" class="w-8 h-8 block mx-auto" style="fill: darkgray">
+                                                                    <path d="M2 25h32L18 9 2 25Z"></path>
+                                                                </svg>
+                                                            </button>
+                                                            <p class="text-2xl my-2 text-gray-500">0</p>
+                                                            <button type="submit" class="w-full" name="vote" value="-">
+                                                                <svg aria-hidden="true" width="36" height="36" viewBox="0 0 36 36" class="w-8 h-8 block mx-auto" style="fill: darkgray">
+                                                                    <path d="M2 11h32L18 27 2 11Z"></path>
+                                                                </svg>
+                                                            </button>
+                                                        </div>
+                                                        <article th:id="'answer-' + ${answer.id}" class="prose prose-slate max-w-none prose-h1:text-3xl w-full"></article>
+                                                        <script th:inline="javascript">
+                                                            /*<![CDATA[*/
+                                                            var content = /*[[${answer.body}]]*/ 'default';
+                                                            var selector = /*[['answer-' + ${answer.id}]]*/ 'answer';
+                                                            console.log((selector));
+                                                            document.getElementById(selector).innerHTML =
+                                                                marked.parse(content);
+                                                            /*]]>*/
+                                                        </script>
+                                                    </div>
+                                                </form>
+                                            </li>
+                                        </ul>
                                     </div>
                                 </div>
                             </section>
-                            <section aria-labelledby="answer-title" class="mt-8 xl:mt-10">
+                            <section aria-labelledby="answer-title" class="mt-8 xl:mt-10" sec:authorize="!isAnonymous()">
                                 <div>
                                     <div class="divide-y divide-gray-200">
                                         <div class="pb-4">

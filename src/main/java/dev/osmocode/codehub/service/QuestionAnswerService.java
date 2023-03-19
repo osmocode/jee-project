@@ -31,7 +31,7 @@ public class QuestionAnswerService {
 
     @Transactional
     public Set<QuestionAnswer> findAnswersById(long id){
-        return repository.findQuestionAnswerById(id);
+        return repository.findQuestionAnswerByQuestionId(id);
     }
 
     @Transactional
