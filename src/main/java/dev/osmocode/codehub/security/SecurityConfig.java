@@ -29,6 +29,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(requests -> {
                     // PUBLIC ROUTE
                     requests.requestMatchers(
+                            "/question/ask"
+                    ).authenticated();
+                    requests.requestMatchers(
                             "/",
                             "/index",
                             "/error",
