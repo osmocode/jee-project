@@ -11,8 +11,7 @@ public class AnswerScore {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private VoteType vote;
+    private int vote;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinTable(
@@ -21,7 +20,6 @@ public class AnswerScore {
             inverseJoinColumns = @JoinColumn(name = "assigner_id")
     )
     private User assigner;
-
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinTable(
@@ -33,7 +31,7 @@ public class AnswerScore {
 
     public AnswerScore() {}
 
-    public AnswerScore(QuestionAnswer answer, User assigner, VoteType vote) {
+    public AnswerScore(QuestionAnswer answer, User assigner, int vote) {
         this.answer = answer;
         this.assigner = assigner;
         this.vote = vote;
@@ -47,11 +45,11 @@ public class AnswerScore {
         this.id = id;
     }
 
-    public VoteType getVote() {
+    public int getVote() {
         return vote;
     }
 
-    public void setVote(VoteType vote) {
+    public void setVote(int vote) {
         this.vote = vote;
     }
 
