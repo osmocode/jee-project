@@ -9,6 +9,9 @@ import dev.osmocode.codehub.repository.QuestionRepository;
 import dev.osmocode.codehub.repository.QuestionTagRepository;
 import dev.osmocode.codehub.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -51,4 +54,15 @@ public class QuestionService {
 //        questionTagSet.forEach(questionTag -> questionTag.addQuestion(question));
         return repository.save(question);
     }
+
+    @Transactional
+    public Optional<Question> findQuestionById(long id) {
+        return repository.findById(id);
+    }
+
+    @Transactional
+    public Page<Question> getQuestionBySearchTitle(String search, int limit, int offset) {
+        return repository.findQuestionByTitle(search, PageRequest.of(offset, limit, Sort.by("id").ascending()));
+    }
+
 }

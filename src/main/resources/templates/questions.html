@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en"
+      class="h-full"
+      xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+    <head th:replace="~{fragments/head :: head}"></head>
+    <body class="h-full">
+    <aside th:replace="~{fragments/sidebar :: sidebar('Questions')}"></aside>
+    <div class="flex flex-1 flex-col lg:pl-64">
+        <nav th:replace="~{fragments/nav :: nav('question')}"></nav>
+        <main class="py-12 sm:py-24">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="mx-auto max-w-2xl lg:mx-0">
+                    <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                        <span th:if="${#strings.isEmpty(search)}">Questions</span>
+                        <span th:if="${!#strings.isEmpty(search)}" th:text="'Search Results: ' + ${search}">Search</span>
+                    </h2>
+                    <p class="mt-6 text-lg leading-8 text-gray-600">Start to search something.</p>
+                </div>
+
+                <ul role="list" class="divide-y divide-gray-200 mt-6" th:each="question: ${questions}">
+                    <li class="px-4 py-4 sm:px-0">
+                        <article class="relative isolate flex flex-col gap-8 lg:flex-row">
+                            <div class="relative aspect-[16/9] sm:aspect-[2/1] lg:aspect-square lg:w-64 lg:shrink-0">
+                                Detail
+                            </div>
+                            <div>
+                                <h3 class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600 max-w-xl">
+                                    <a th:href="'/question/' + ${question.id}" th:text="${question.title}">Title</a>
+                                </h3>
+                                <!--
+                                <div class="flex items-center gap-x-4 text-xs mt-2">
+                                    <a href="#" class="relative z-10 rounded-full bg-gray-50 py-1.5 px-3 font-medium text-gray-600 hover:bg-gray-100">Marketing</a>
+                                    <a href="#" class="relative z-10 rounded-full bg-gray-50 py-1.5 px-3 font-medium text-gray-600 hover:bg-gray-100">Marketing</a>
+                                    <a href="#" class="relative z-10 rounded-full bg-gray-50 py-1.5 px-3 font-medium text-gray-600 hover:bg-gray-100">Marketing</a>
+                                    <a href="#" class="relative z-10 rounded-full bg-gray-50 py-1.5 px-3 font-medium text-gray-600 hover:bg-gray-100">Marketing</a>
+                                    <a href="#" class="relative z-10 rounded-full bg-gray-50 py-1.5 px-3 font-medium text-gray-600 hover:bg-gray-100">Marketing</a>
+                                </div>
+                                -->
+                            </div>
+                        </article>
+                    </li>
+                </ul>
+
+            </div>
+        </main>
+    </div>
+    </body>
+</html>

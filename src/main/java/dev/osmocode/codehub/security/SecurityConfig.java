@@ -40,7 +40,8 @@ public class SecurityConfig {
                             "/profile/**",
                             "/register",
                             "/profiles",
-                            "/tags**"
+                            "/tags**",
+                            "/question"
                             ).permitAll();
                     // ADMIN ROUTE
                     requests.requestMatchers(
