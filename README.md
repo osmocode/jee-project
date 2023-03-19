@@ -8,10 +8,10 @@ StackOverFlow like application for University, JEE project.
 
 ## Students
 
-Orhan Uyar; orhan.uyar@edu.univ-eiffel.fr
-Sofian El Guetibi: sofian.el-guetibi@edu.univ-eiffel.fr
-Kelly Dufour : kelly.dufour@edu.univ-eiffel.fr
-Jughurta Gahlouz : jughurta.gahlouz@edu.univ-eiffel.fr
+Orhan Uyar; orhan.uyar@edu.univ-eiffel.fr  
+Sofian El Guetibi: sofian.el-guetibi@edu.univ-eiffel.fr  
+Kelly Dufour : kelly.dufour@edu.univ-eiffel.fr  
+Jughurta Gahlouz : jughurta.gahlouz@edu.univ-eiffel.fr  
 
 ## ☀️ License
 
