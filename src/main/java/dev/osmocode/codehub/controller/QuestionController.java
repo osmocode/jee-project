@@ -1,7 +1,9 @@
 package dev.osmocode.codehub.controller;
 
 import dev.osmocode.codehub.dto.QuestionAnswerDto;
+import dev.osmocode.codehub.dto.QuestionAnswerVoteDto;
 import dev.osmocode.codehub.repository.UserRepository;
+import dev.osmocode.codehub.service.AnswerScoreService;
 import dev.osmocode.codehub.service.QuestionAnswerService;
 import dev.osmocode.codehub.service.QuestionService;
 import dev.osmocode.codehub.service.QuestionTagService;
@@ -23,6 +25,7 @@ public class QuestionController {
     private final QuestionTagService questionTagService;
 
     private final QuestionAnswerService questionAnswerService;
+    private final AnswerScoreService answerScoreService;
     private final UserRepository userRepository;
 
     public QuestionController(
@@ -30,12 +33,14 @@ public class QuestionController {
             QuestionService questionService,
             QuestionTagService questionTagService,
             QuestionAnswerService questionAnswerService,
-            UserRepository userRepository) {
+            UserRepository userRepository,
+            AnswerScoreService answerScoreService) {
         this.paginationValidator = paginationValidator;
         this.questionService = questionService;
         this.questionTagService = questionTagService;
         this.questionAnswerService = questionAnswerService;
         this.userRepository = userRepository;
+        this.answerScoreService = answerScoreService;
     }
 
     @GetMapping("/question")
@@ -76,6 +81,25 @@ public class QuestionController {
             return modelAndView;
         }
         questionAnswerService.performAnswerQuestion(questionAnswerDto, authentication.getName(), id);
+        modelAndView.setViewName("redirect:/question/" + id);
+        return modelAndView;
+    }
+
+    @PostMapping("/question/{id}/vote")
+    public ModelAndView postAnswerVote(
+            Authentication authentication,
+            @PathVariable long id,
+            @Valid @ModelAttribute("questionAnswerVoteDto") QuestionAnswerVoteDto questionAnswerVoteDto,
+            BindingResult bindingResult
+    ){
+        ModelAndView modelAndView = new ModelAndView();
+
+        if(bindingResult.hasErrors() || null == authentication){
+            modelAndView.setViewName("error");
+            return modelAndView;
+        }
+
+        answerScoreService.performAnswerAddScore(questionAnswerVoteDto, authentication.getName());
         modelAndView.setViewName("redirect:/question/" + id);
         return modelAndView;
     }
