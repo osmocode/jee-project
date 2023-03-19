@@ -97,4 +97,12 @@ public class Question {
     public void setTags(Set<QuestionTag> tags) {
         this.tags = tags;
     }
+
+    public Set<QuestionAnswer> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(Set<QuestionAnswer> answers) {
+        this.answers = answers;
+    }
 }

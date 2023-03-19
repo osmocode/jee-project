@@ -12,11 +12,15 @@ import java.util.stream.Collectors;
  */
 @Component
 public class UserOrientedGraph {
+    
+    private final Object lock = new Object();
 
     private final Map<String, UserVertex> vertices = new HashMap<>();
 
     public Map<String, UserVertex> getVertices() {
-        return vertices;
+        synchronized (lock) {
+            return vertices;
+        }
     }
 
     public void addArc(UserVertex source, UserVertex destination) {
@@ -24,16 +28,18 @@ public class UserOrientedGraph {
     }
 
     public void addArc(UserVertex source, UserVertex destination, int score) {
-        if (containsArc(source, destination)) {
-            return;
+        synchronized (lock) {
+            if (containsArc(source, destination)) {
+                return;
+            }
+            if (!containsVertex(source)) {
+                addVertex(source);
+            }
+            if (!containsVertex(destination)) {
+                addVertex(destination);
+            }
+            vertices.get(source.getLabel()).updateScore(destination, score);
         }
-        if (!containsVertex(source)) {
-            addVertex(source);
-        }
-        if (!containsVertex(destination)) {
-            addVertex(destination);
-        }
-        vertices.get(source.getLabel()).updateScore(destination, score);
     }
 
     public void addArcs(Collection<Arc> arcs) {
@@ -41,13 +47,15 @@ public class UserOrientedGraph {
     }
 
     public void updateScoreArc(UserVertex source, UserVertex destination, int score) {
-        if (!containsVertex(source.getLabel())) {
-            addVertex(source);
+        synchronized (lock) {
+            if (!containsVertex(source.getLabel())) {
+                addVertex(source);
+            }
+            if (!containsVertex(destination.getLabel())) {
+                addVertex(destination);
+            }
+            vertices.get(source.getLabel()).updateScore(destination, score);
         }
-        if (!containsVertex(destination.getLabel())) {
-            addVertex(destination);
-        }
-        vertices.get(source.getLabel()).updateScore(destination, score);
     }
 
     public void updateScoreArcs(Collection<Arc> arcs) {
@@ -55,10 +63,12 @@ public class UserOrientedGraph {
     }
 
     public int scoreArc(UserVertex source, UserVertex destination) {
-        if (!containsArc(source, destination)) {
-            throw new IllegalArgumentException("Arc doesn't exist");
+        synchronized (lock) {
+            if (!containsArc(source, destination)) {
+                throw new IllegalArgumentException("Arc doesn't exist");
+            }
+            return vertices.get(source.getLabel()).getNeighbors().get(destination);
         }
-        return vertices.get(source.getLabel()).getNeighbors().get(destination);
     }
 
     public void addVertex(String label) {
@@ -66,22 +76,26 @@ public class UserOrientedGraph {
     }
 
     public void addVertex(UserVertex vertex) {
-        if (containsVertex(vertex.getLabel())) {
-            return;
+        synchronized (lock) {
+            if (containsVertex(vertex.getLabel())) {
+                return;
+            }
+            vertices.put(vertex.getLabel(), vertex);
         }
-        vertices.put(vertex.getLabel(), vertex);
     }
 
     public Collection<Arc> arcs() {
-        return vertices
-                .entrySet()
-                .stream()
-                .flatMap(entry -> entry.getValue()
-                        .getNeighbors()
-                        .entrySet()
-                        .stream()
-                        .map(neighbor -> new Arc(entry.getValue(), neighbor.getKey(), neighbor.getValue()))
-                ).collect(Collectors.toSet());
+        synchronized (lock) {
+            return vertices
+                    .entrySet()
+                    .stream()
+                    .flatMap(entry -> entry.getValue()
+                            .getNeighbors()
+                            .entrySet()
+                            .stream()
+                            .map(neighbor -> new Arc(entry.getValue(), neighbor.getKey(), neighbor.getValue()))
+                    ).collect(Collectors.toSet());
+        }
     }
 
     public Collection<Arc> boucles() {
@@ -92,22 +106,30 @@ public class UserOrientedGraph {
     }
 
     public boolean containsArc(UserVertex source, UserVertex destination) {
-        if (!containsVertex(source) || !containsVertex(destination)) {
-            return false;
+        synchronized (lock) {
+            if (!containsVertex(source) || !containsVertex(destination)) {
+                return false;
+            }
+            return vertices.get(source.getLabel()).getNeighbors().containsKey(destination);
         }
-        return vertices.get(source.getLabel()).getNeighbors().containsKey(destination);
     }
 
     public boolean containsVertex(UserVertex vertex) {
-        return vertices.containsKey(vertex.getLabel());
+        synchronized (lock) {
+            return vertices.containsKey(vertex.getLabel());
+        }
     }
 
     public boolean containsVertex(String label) {
-        return vertices.containsKey(label);
+        synchronized (lock) {
+            return vertices.containsKey(label);
+        }
     }
 
     public int degree(UserVertex vertex) {
-        return vertices.get(vertex.getLabel()).getNeighbors().size();
+        synchronized (lock) {
+            return vertices.get(vertex.getLabel()).getNeighbors().size();
+        }
     }
 
     public int arcsNumber() {
@@ -119,11 +141,15 @@ public class UserOrientedGraph {
     }
 
     public int verticesNumber() {
-        return vertices.size();
+        synchronized (lock) {
+            return vertices.size();
+        }
     }
 
     public void removeArc(UserVertex source, UserVertex destination) {
-        vertices.get(source.getLabel()).getNeighbors().remove(destination);
+        synchronized (lock) {
+            vertices.get(source.getLabel()).getNeighbors().remove(destination);
+        }
     }
 
     public void removeArcs(Collection<Arc> arcs) {
@@ -131,8 +157,10 @@ public class UserOrientedGraph {
     }
 
     public void removeVertex(UserVertex toRemove) {
-        vertices.values().forEach(v -> v.getNeighbors().remove(toRemove));
-        vertices.remove(toRemove.getLabel());
+        synchronized (lock) {
+            vertices.values().forEach(v -> v.getNeighbors().remove(toRemove));
+            vertices.remove(toRemove.getLabel());
+        }
     }
 
     public void removeVertices(Collection<UserVertex> vertices) {
@@ -140,7 +168,9 @@ public class UserOrientedGraph {
     }
 
     public Collection<UserVertex> vertices() {
-        return vertices.values();
+        synchronized (lock) {
+            return vertices.values();
+        }
     }
 
     public UserOrientedGraph inducedSubgraph(Collection<UserVertex> inducers) {
@@ -155,7 +185,9 @@ public class UserOrientedGraph {
     }
 
     public Collection<UserVertex> neighbor(UserVertex vertex) {
-        return vertices.get(vertex.getLabel()).getNeighbors().keySet();
+        synchronized (lock) {
+            return vertices.get(vertex.getLabel()).getNeighbors().keySet();
+        }
     }
 }
 
