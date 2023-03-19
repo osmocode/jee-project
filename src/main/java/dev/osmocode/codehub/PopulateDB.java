@@ -1,13 +1,11 @@
 package dev.osmocode.codehub;
 
+import dev.osmocode.codehub.dto.QuestionAnswerDto;
 import dev.osmocode.codehub.dto.QuestionAskedDto;
 import dev.osmocode.codehub.entity.Authority;
 import dev.osmocode.codehub.entity.QuestionTag;
 import dev.osmocode.codehub.entity.User;
-import dev.osmocode.codehub.service.AuthorityService;
-import dev.osmocode.codehub.service.QuestionService;
-import dev.osmocode.codehub.service.QuestionTagService;
-import dev.osmocode.codehub.service.UserService;
+import dev.osmocode.codehub.service.*;
 import dev.osmocode.codehub.utils.Role;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,26 +24,79 @@ public class PopulateDB implements CommandLineRunner {
     private final PasswordEncoder passwordEncoder;
     private final QuestionTagService questionTagService;
     private final QuestionService questionService;
+    private final QuestionAnswerService questionAnswerService;
 
     private final List<String> tags = List.of("java", "jee", "oop", "sql", "jpql", "spring", "spring-security", "spring-data",
             "spring-mvc", "algorithm", "system", "functional-programming", "mobile-programming", "devops", "bdd",
             "c", "python", "scala", "ocaml", "rust", "android", "angular", "reactjs", "vueJS", "javascript", "html",
             "css", "c", "c++", "haskell", "c#", "kotlin", "jetpack-compose", "jquery", "mysql", "sqlite", "nodejs");
 
-    private final static int NB_USER = 60;
+    private final String body = """
+            I am using [m2r2](https://pypi.org/project/m2r2/) to render html document using sphinx. My folder structure is
+                                    
+                project
+                  |_ docs
+                      |_ sphinx root
+                  |_ README.md
+                  |_ image_to_include_in_readme.png
+               \s
+                                    
+            README.md looks like this:
+                                    
+                # This is heading
+               \s
+                Some text. refer to the image : [Image](image_to_include_in_readme.png)
+               \s
+                                    
+            But this image is not readable from sphinx root folder.
+                                    
+            I am able to render readme.md correctly using `mdinclude` directive in html but images are not rendered. I am getting `WARNING: image file not readable:` \s
+            I know i can copy the images into build folder but I don't want to do that. How do I fix it?
+            """;
+
+    private final List<QuestionAskedDto> questions = List.of(
+            new QuestionAskedDto("Scale animation when user touches a recyclerview item", body),
+            new QuestionAskedDto("Problem in finding duplicates in a string using bit manipulation", body),
+            new QuestionAskedDto("Error when converting saved_model to .tflite using tflite converter", body),
+            new QuestionAskedDto("python smtplib failing to run (SMTP AUTH extension not supported)", body),
+            new QuestionAskedDto("Creating a class \"Vault\" that saves a message protected by a code", body),
+            new QuestionAskedDto("Why is my react .map showing same result twice when fetching from API?", body),
+            new QuestionAskedDto("How to create a service worker with workbox in Manifest V3?", body),
+            new QuestionAskedDto("Query with laravel", body),
+            new QuestionAskedDto("Check if file system is case-insensitive in Python", body),
+            new QuestionAskedDto("R one-to-many mappings", body),
+            new QuestionAskedDto("How to mock Interface in JUnit instead of its implementation class in Spring Boot", body),
+            new QuestionAskedDto("Django using rest_framework url_pattern not mapping to model instance view", body),
+            new QuestionAskedDto("str_replace_all with multiple vector patterns", body),
+            new QuestionAskedDto("C++ process snapshot returns [System process] and cant find a target exe in snapshot", body),
+            new QuestionAskedDto("What is the procedure of creating a DB view in a JHispter project?", body),
+            new QuestionAskedDto("Firebase: Why is my set (with merge : true) operation removes all other fields in my document?", body),
+            new QuestionAskedDto("fatal error: 'GL/glu.h' file not found although path included", body),
+            new QuestionAskedDto("How to show cypress test result when running `nx affected --target=e2e`", body),
+            new QuestionAskedDto("take only some values from a column in python (from VCF file)", body),
+            new QuestionAskedDto("JOOQ parsing issue postgres bitwise and (&)", body),
+            new QuestionAskedDto("Can I call a process from a function?", body),
+            new QuestionAskedDto("What is the right way to download image and persist with Spring webflux", body),
+            new QuestionAskedDto("HttpPost response \"BadRequest\" in Blazor Webassembly hosted model", body)
+    );
+
+    private final List<String> usernames = List.of("user", "ypicker", "user_1", "user_2", "user_3");
+
+    private final static int NB_USER = 25;
 
     public PopulateDB(
             UserService userService,
             AuthorityService authorityService,
             PasswordEncoder passwordEncoder,
             QuestionTagService questionTagService,
-            QuestionService questionService
-    ) {
+            QuestionService questionService,
+            QuestionAnswerService questionAnswerService) {
         this.userService = userService;
         this.authorityService = authorityService;
         this.passwordEncoder = passwordEncoder;
         this.questionTagService = questionTagService;
         this.questionService = questionService;
+        this.questionAnswerService = questionAnswerService;
     }
 
     @Override
@@ -53,6 +104,7 @@ public class PopulateDB implements CommandLineRunner {
         populateUser(NB_USER);
         populateTags();
         populateQuestion();
+        populateAnswer();
     }
 
     private void populateUser(int number) throws InterruptedException {
@@ -79,57 +131,6 @@ public class PopulateDB implements CommandLineRunner {
     }
 
     private void populateQuestion() {
-        var body = """
-                I am using [m2r2](https://pypi.org/project/m2r2/) to render html document using sphinx. My folder structure is
-                                        
-                    project
-                      |_ docs
-                          |_ sphinx root
-                      |_ README.md
-                      |_ image_to_include_in_readme.png
-                   \s
-                                        
-                README.md looks like this:
-                                        
-                    # This is heading
-                   \s
-                    Some text. refer to the image : [Image](image_to_include_in_readme.png)
-                   \s
-                                        
-                But this image is not readable from sphinx root folder.
-                                        
-                I am able to render readme.md correctly using `mdinclude` directive in html but images are not rendered. I am getting `WARNING: image file not readable:` \s
-                I know i can copy the images into build folder but I don't want to do that. How do I fix it?
-                """;
-
-
-        List<QuestionAskedDto> questions = List.of(
-                new QuestionAskedDto("Scale animation when user touches a recyclerview item", body),
-                new QuestionAskedDto("Problem in finding duplicates in a string using bit manipulation", body),
-                new QuestionAskedDto("Error when converting saved_model to .tflite using tflite converter", body),
-                new QuestionAskedDto("python smtplib failing to run (SMTP AUTH extension not supported)", body),
-                new QuestionAskedDto("Creating a class \"Vault\" that saves a message protected by a code", body),
-                new QuestionAskedDto("Why is my react .map showing same result twice when fetching from API?", body),
-                new QuestionAskedDto("How to create a service worker with workbox in Manifest V3?", body),
-                new QuestionAskedDto("Query with laravel", body),
-                new QuestionAskedDto("Check if file system is case-insensitive in Python", body),
-                new QuestionAskedDto("R one-to-many mappings", body),
-                new QuestionAskedDto("How to mock Interface in JUnit instead of its implementation class in Spring Boot", body),
-                new QuestionAskedDto("Django using rest_framework url_pattern not mapping to model instance view", body),
-                new QuestionAskedDto("str_replace_all with multiple vector patterns", body),
-                new QuestionAskedDto("C++ process snapshot returns [System process] and cant find a target exe in snapshot", body),
-                new QuestionAskedDto("What is the procedure of creating a DB view in a JHispter project?", body),
-                new QuestionAskedDto("Firebase: Why is my set (with merge : true) operation removes all other fields in my document?", body),
-                new QuestionAskedDto("fatal error: 'GL/glu.h' file not found although path included", body),
-                new QuestionAskedDto("How to show cypress test result when running `nx affected --target=e2e`", body),
-                new QuestionAskedDto("take only some values from a column in python (from VCF file)", body),
-                new QuestionAskedDto("JOOQ parsing issue postgres bitwise and (&)", body),
-                new QuestionAskedDto("Can I call a process from a function?", body),
-                new QuestionAskedDto("What is the right way to download image and persist with Spring webflux", body),
-                new QuestionAskedDto("HttpPost response \"BadRequest\" in Blazor Webassembly hosted model", body)
-        );
-
-        List<String> usernames = List.of("user", "ypicker", "user_1", "user_2", "user_3");
 
         Set<Set<Long>> tags = new HashSet<>();
         tags.add(Set.of(1L, 5L, 9L, 8L, 7L));
@@ -140,7 +141,7 @@ public class PopulateDB implements CommandLineRunner {
         tags.add(Set.of(13L, 4L));
         tags.add(Set.of(2L, 12L, 16L));
         tags.add(Set.of(6L, 7L, 8L, 14L));
-        
+
         questions.forEach(question -> questionService.performAskQuestion(
                         question,
                         usernames.stream().skip((long) (Math.random() * usernames.size())).findFirst().orElseThrow(),
@@ -148,5 +149,30 @@ public class PopulateDB implements CommandLineRunner {
                 )
         );
         System.out.println("Some question created");
+    }
+
+    void populateAnswer() {
+        String body = """
+            This looks like a bug (which I'd recommend reporting).
+           \s
+            Interestingly, it only seems to manifest in a `BorderLayout`, but not in a `HBox`. It also doesn't show up if you add style to the text flow.
+           \s                 
+            If those workarounds aren't usable, calling `textFlow.autosize()` to recompute the size of the text flow seems to work. Since you say in the comments that you're using a custom pane to contain the text flow, you may find a convenient place to do that in the custom pane's `layoutChildren()` method, or similar. As a worst case, you can just call that in the event handler:
+           \s               
+                    layout.setOnMouseClicked(e -> {
+                        textFlow.getChildren().addAll(new Text("myAdd "));
+                        textFlow.autosize();
+                    });
+            """;
+        QuestionAnswerDto answer = new QuestionAnswerDto();
+        answer.setBody(body);
+        IntStream.range(0, questions.size()).forEach(i ->
+                questionAnswerService.performAnswerQuestion(
+                        answer,
+                        usernames.stream().skip((long) (Math.random() * usernames.size())).findFirst().orElseThrow(),
+                        i
+                )
+        );
+        System.out.println("Some answer created");
     }
 }
