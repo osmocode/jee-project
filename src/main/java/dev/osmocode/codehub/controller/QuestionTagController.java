@@ -36,4 +36,20 @@ public class QuestionTagController {
         modelAndView.addObject("search", optionalSearch.orElse(""));
         return modelAndView;
     }
+
+
+    @GetMapping("/tags-select")
+    public ModelAndView getTagSelect(
+            @RequestParam(value = "limit", required = false) Optional<Integer> optionalLimit,
+            @RequestParam(value = "offset", required = false) Optional<Integer> optionalOffset,
+            @RequestParam(value = "search", required = false) Optional<String> optionalSearch
+    ) {
+        var limit = paginationValidator.sanitizeLimit(optionalLimit);
+        var offset = paginationValidator.sanitizeOffset(optionalOffset);
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("tags-select");
+        modelAndView.addObject("tagsPage", questionTagService.getTagsBySearch(optionalSearch.orElse(""), limit, offset));
+        modelAndView.addObject("search", optionalSearch.orElse(""));
+        return modelAndView;
+    }
 }
