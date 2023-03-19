@@ -40,20 +40,74 @@
                                         </script>
                                     </div>
                                 </div>
-
-                                <!--
                                 <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-                                    <label for="tag" class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">Tags</label>
-                                    <div class="mt-2 sm:col-span-2 sm:mt-0">
-                                        <select id="tag" name="tag" class="block w-full max-w-lg rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
-                                            <option>java</option>
-                                            <option>javascript</option>
-                                            <option>c++</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                -->
+                                    <label for="tags" class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">Tags</label>
+                                    <div class="relative mt-2">
+                                        <p class="mb-2 text-sm text-gray-500 w-full">
+                                            Selected tags:
+                                            <span id="selected" class="flex flex-1 flex-wrap gap-2 mt-2"></span>
+                                        </p>
+                                        <input id="tags" type="text" class="w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-12 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" role="combobox" aria-controls="options" aria-expanded="false">
+                                        <div id="input-list" class=".choices">
+                                            <!-- <turbo-frame id="tag-list" src="/tags-select" loading="lazy"></turbo-frame> -->
+                                        </div>
+                                        <script>
+                                            var input = document.getElementById('tags');
+                                            var list = document.getElementById('input-list');
+                                            var options = document.querySelectorAll('li');
+                                            var choices = document.getElementById('selected');
+                                            var selected = {};
 
+                                            input.addEventListener('input', () => {
+                                                while (list.firstChild) {
+                                                    list.removeChild(list.lastChild);
+                                                }
+                                                var n = document.createElement('turbo-frame');
+                                                n.setAttribute('id', 'tag-list');
+                                                n.setAttribute('src', `/tags-select?search=${input.value}`);
+                                                list.append(n);
+
+                                                setTimeout(() => {
+                                                    options.forEach((l) => {
+                                                        l.removeEventListener('click', null, null);
+                                                    });
+                                                    options = document.querySelectorAll('li');
+                                                    options.forEach((l) => {
+                                                        l.addEventListener('click', () => {
+                                                            if (Object.keys(selected).length < 5) {
+                                                                selected[l.getAttribute('value')] = l.innerHTML;
+                                                            }
+                                                            updateSelected();
+                                                        });
+                                                    });
+                                                }, 300);
+                                            });
+
+                                            function updateSelected() {
+                                                while (choices.firstChild) {
+                                                    choices.removeChild(choices.lastChild);
+                                                }
+                                                Object.keys(selected).forEach(key => {
+                                                    var c = document.createElement('span');
+                                                    c.setAttribute('class', 'inline-flex items-center rounded-md bg-gray-100 px-2.5 py-0.5 text-sm font-medium text-gray-800');
+                                                    c.innerText = selected[key];
+                                                    var i = document.createElement('input');
+                                                    i.setAttribute('type', 'hidden');
+                                                    i.setAttribute('name', 'selectedTags');
+                                                    i.setAttribute('value', key);
+
+                                                    c.addEventListener('click', () => {
+                                                        delete selected[key];
+                                                        updateSelected();
+                                                    })
+                                                    choices.append(c);
+                                                    choices.append(i);
+                                                });
+                                            }
+
+                                        </script>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>

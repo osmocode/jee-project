@@ -33,7 +33,6 @@ public class QuestionAskController {
     @GetMapping
     public String getQuestionAsk(Model model) {
         model.addAttribute("questionAskedDto", new QuestionAskedDto());
-        model.addAttribute("questionTags", questionTagService.getAll().stream().limit(10));
         return "question-ask";
     }
 

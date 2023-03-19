@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en"
       class="h-full"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head th:replace="~{fragments/head :: head}"></head>
     <body class="h-full">
         <aside th:replace="~{fragments/sidebar :: sidebar('Questions')}"></aside>
@@ -42,20 +43,9 @@
                                     <div>
                                         <h2 class="text-sm font-medium text-gray-500">Tags</h2>
                                         <ul role="list" class="mt-2 leading-8">
-                                            <li class="inline">
-                                                <a href="#" class="relative inline-flex items-center rounded-full px-2.5 py-1 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                                                    <div class="absolute flex flex-shrink-0 items-center justify-center">
-                                                        <span class="h-1.5 w-1.5 rounded-full bg-rose-500" aria-hidden="true"></span>
-                                                    </div>
-                                                    <div class="ml-3 text-xs font-semibold text-gray-900">Bug</div>
-                                                </a>
-                                            </li>
-                                            <li class="inline">
-                                                <a href="#" class="relative inline-flex items-center rounded-full px-2.5 py-1 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                                                    <div class="absolute flex flex-shrink-0 items-center justify-center">
-                                                        <span class="h-1.5 w-1.5 rounded-full bg-indigo-500" aria-hidden="true"></span>
-                                                    </div>
-                                                    <div class="ml-3 text-xs font-semibold text-gray-900">Accessibility</div>
+                                            <li class="inline" th:each="tag : ${question.tags}">
+                                                <a  class="relative inline-flex items-center rounded px-2.5 py-1 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                                                    <div class=" text-xs font-semibold text-gray-900" th:text="${tag.name}"></div>
                                                 </a>
                                             </li>
                                         </ul>
@@ -68,7 +58,6 @@
                                 <script th:inline="javascript">
                                     /*<![CDATA[*/
                                     var content = /*[[${question.body}]]*/ 'default';
-                                    console.log(content);
                                     document.getElementById('content').innerHTML =
                                         marked.parse(content);
                                     /*]]>*/
@@ -80,18 +69,43 @@
                                         <div class="pb-4">
                                             <h2 id="answers-title" class="text-lg font-medium text-gray-900">Answers</h2>
                                         </div>
-                                        <div class="pt-6">
-                                            <!-- Activity feed-->
-                                            <ul role="list" class="divide-y divide-gray-200">
-                                                <li class="py-4" th:each="answer: ${answers}">
-                                                    <span th:text="${answer.body}"></span>
-                                                </li>
-                                            </ul>
-                                        </div>
+                                        <ul role="list" class="divide-y divide-gray-200">
+                                            <li class="py-4" th:each="answer: ${answers}">
+                                                <form method="POST" th:action="@{/question/{id}/vote (id=${question.id})}" th:object="${questionAnswerVoteDto}" id="vote" data-turbo="false">
+                                                    <input name="questionId" th:value="${question.id}" type="hidden">
+                                                    <input name="answerId" th:value="${answer.id}" type="hidden">
+                                                    <div class="flex flex-row gap-x-6">
+                                                        <div class="flex flex-col text-center">
+                                                            <button type="submit" class="w-full" name="vote" value="+">
+                                                                <svg aria-hidden="true" width="36" height="36" viewBox="0 0 36 36" class="w-8 h-8 block mx-auto" style="fill: darkgray">
+                                                                    <path d="M2 25h32L18 9 2 25Z"></path>
+                                                                </svg>
+                                                            </button>
+                                                            <p class="text-2xl my-2 text-gray-500">0</p>
+                                                            <button type="submit" class="w-full" name="vote" value="-">
+                                                                <svg aria-hidden="true" width="36" height="36" viewBox="0 0 36 36" class="w-8 h-8 block mx-auto" style="fill: darkgray">
+                                                                    <path d="M2 11h32L18 27 2 11Z"></path>
+                                                                </svg>
+                                                            </button>
+                                                        </div>
+                                                        <article th:id="'answer-' + ${answer.id}" class="prose prose-slate max-w-none prose-h1:text-3xl w-full"></article>
+                                                        <script th:inline="javascript">
+                                                            /*<![CDATA[*/
+                                                            var content = /*[[${answer.body}]]*/ 'default';
+                                                            var selector = /*[['answer-' + ${answer.id}]]*/ 'answer';
+                                                            console.log((selector));
+                                                            document.getElementById(selector).innerHTML =
+                                                                marked.parse(content);
+                                                            /*]]>*/
+                                                        </script>
+                                                    </div>
+                                                </form>
+                                            </li>
+                                        </ul>
                                     </div>
                                 </div>
                             </section>
-                            <section aria-labelledby="answer-title" class="mt-8 xl:mt-10">
+                            <section aria-labelledby="answer-title" class="mt-8 xl:mt-10" sec:authorize="!isAnonymous()">
                                 <div>
                                     <div class="divide-y divide-gray-200">
                                         <div class="pb-4">
@@ -134,20 +148,9 @@
                                 <div>
                                     <h2 class="text-sm font-medium text-gray-500">Tags</h2>
                                     <ul role="list" class="mt-2 leading-8">
-                                        <li class="inline">
-                                            <a href="#" class="relative inline-flex items-center rounded-full px-2.5 py-1 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                                                <div class="absolute flex flex-shrink-0 items-center justify-center">
-                                                    <span class="h-1.5 w-1.5 rounded-full bg-rose-500" aria-hidden="true"></span>
-                                                </div>
-                                                <div class="ml-3 text-xs font-semibold text-gray-900">Bug</div>
-                                            </a>
-                                        </li>
-                                        <li class="inline">
-                                            <a href="#" class="relative inline-flex items-center rounded-full px-2.5 py-1 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                                                <div class="absolute flex flex-shrink-0 items-center justify-center">
-                                                    <span class="h-1.5 w-1.5 rounded-full bg-indigo-500" aria-hidden="true"></span>
-                                                </div>
-                                                <div class="ml-3 text-xs font-semibold text-gray-900">Accessibility</div>
+                                        <li class="inline" th:each="tag : ${question.tags}">
+                                            <a  class="relative inline-flex items-center rounded px-2.5 py-1 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                                                <div class="text-xs font-semibold text-gray-900" th:text="${tag.name}"></div>
                                             </a>
                                         </li>
                                     </ul>
@@ -156,25 +159,6 @@
                         </aside>
                     </div>
                 </div>
-
-                <!--
-                <div class="md:flex md:items-center md:justify-between">
-                    <div class="min-w-0 flex-1">
-                        <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight" th:text="${question.title}">Title</h2>
-                    </div>
-                </div>
-
-                <article id="content" class="prose prose-slate max-w-none"></article>
-                <script th:inline="javascript">
-                    /*<![CDATA[*/
-                    var content = /*[[${question.body}]]*/ 'default';
-                    console.log(content);
-                    document.getElementById('content').innerHTML =
-                        marked.parse(content);
-                    /*]]>*/
-                </script>
-                -->
-
             </main>
         </div>
     </body>

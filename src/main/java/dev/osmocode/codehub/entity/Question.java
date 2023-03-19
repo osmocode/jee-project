@@ -30,7 +30,7 @@ public class Question {
     private User interviewer;
 
     @ManyToMany(
-            fetch = FetchType.LAZY
+            fetch = FetchType.EAGER
     )
     @JoinTable(
             name = "attributed_question_tags",
