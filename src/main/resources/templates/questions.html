@@ -15,34 +15,64 @@
                         <span th:if="${!#strings.isEmpty(search)}" th:text="'Search Results: ' + ${search}">Search</span>
                     </h2>
                     <p class="mt-6 text-lg leading-8 text-gray-600">Start to search something.</p>
+                    <div class="mt-4">
+                        <a th:href="@{/question/ask}" class="rounded-md bg-sky-50 py-2.5 px-3.5 text-sm font-semibold text-sky-600 shadow-sm hover:bg-sly-100">Ask question</a>
+                    </div>
                 </div>
-
-                <ul role="list" class="divide-y divide-gray-200 mt-6" th:each="question: ${questions}">
-                    <li class="px-4 py-4 sm:px-0">
-                        <article class="relative isolate flex flex-col gap-8 lg:flex-row">
-                            <div class="relative aspect-[16/9] sm:aspect-[2/1] lg:aspect-square lg:w-64 lg:shrink-0">
-                                Detail
-                            </div>
-                            <div>
-                                <h3 class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600 max-w-xl">
-                                    <a th:href="'/question/' + ${question.id}" th:text="${question.title}">Title</a>
-                                </h3>
-                                <!--
-                                <div class="flex items-center gap-x-4 text-xs mt-2">
-                                    <a href="#" class="relative z-10 rounded-full bg-gray-50 py-1.5 px-3 font-medium text-gray-600 hover:bg-gray-100">Marketing</a>
-                                    <a href="#" class="relative z-10 rounded-full bg-gray-50 py-1.5 px-3 font-medium text-gray-600 hover:bg-gray-100">Marketing</a>
-                                    <a href="#" class="relative z-10 rounded-full bg-gray-50 py-1.5 px-3 font-medium text-gray-600 hover:bg-gray-100">Marketing</a>
-                                    <a href="#" class="relative z-10 rounded-full bg-gray-50 py-1.5 px-3 font-medium text-gray-600 hover:bg-gray-100">Marketing</a>
-                                    <a href="#" class="relative z-10 rounded-full bg-gray-50 py-1.5 px-3 font-medium text-gray-600 hover:bg-gray-100">Marketing</a>
+                <div class="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
+                    <ul role="list" class="divide-y divide-gray-200 mt-6">
+                        <li class="px-4 py-4 sm:px-0" th:each="question: ${questions}">
+                            <article class="flex flex-col sm:flex-row gap-x-4">
+                                <div class="flex flex-row sm:flex-col gap-y-2 gap-x-4 text-end sm:w-32">
+                                    <span>1 vote</span>
+                                    <span>
+                                        <span class="rounded-md bg-green-100 px-2.5 py-0.5 text-sm font-medium text-green-800">1 Answer</span>
+                                    </span>
                                 </div>
-                                -->
-                            </div>
-                        </article>
-                    </li>
-                </ul>
-
+                                <div class="flex flex-col">
+                                    <a th:href="'/question/' + ${question.id}" class="text-2xl font-semibold text-gray-900" th:text="${question.title}">Title</a>
+                                    <p class="mt-1 max-w-2xl text-sm text-gray-500">Tags</p>
+                                    <div class="flex flex-1 flex-wrap gap-2 mt-2">
+                                        <span class="inline-flex items-center rounded bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-800">beta</span>
+                                        <span class="inline-flex items-center rounded bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-800">java</span>
+                                        <span class="inline-flex items-center rounded bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-800">javascript</span>
+                                        <span class="inline-flex items-center rounded bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-800">css</span>
+                                        <span class="inline-flex items-center rounded bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-800">html</span>
+                                    </div>
+                                </div>
+                            </article>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </main>
     </div>
     </body>
 </html>
+
+
+<!--
+<li class="px-4 py-4 sm:px-0">
+    <article class="relative isolate flex flex-col gap-8 lg:flex-row">
+        <div class="relative lg:aspect-square lg:w-64 lg:shrink-0">
+            Detail
+        </div>
+        <div>
+            <h3 class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600 max-w-xl">
+                <a th:href="'/question/' + ${question.id}" th:text="${question.title}">Title</a>
+            </h3>
+
+        </div>
+    </article>
+</li>
+-->
+
+<!--
+            <div class="flex items-center gap-x-4 text-xs mt-2">
+                <a href="#" class="relative z-10 rounded-full bg-gray-50 py-1.5 px-3 font-medium text-gray-600 hover:bg-gray-100">Marketing</a>
+                <a href="#" class="relative z-10 rounded-full bg-gray-50 py-1.5 px-3 font-medium text-gray-600 hover:bg-gray-100">Marketing</a>
+                <a href="#" class="relative z-10 rounded-full bg-gray-50 py-1.5 px-3 font-medium text-gray-600 hover:bg-gray-100">Marketing</a>
+                <a href="#" class="relative z-10 rounded-full bg-gray-50 py-1.5 px-3 font-medium text-gray-600 hover:bg-gray-100">Marketing</a>
+                <a href="#" class="relative z-10 rounded-full bg-gray-50 py-1.5 px-3 font-medium text-gray-600 hover:bg-gray-100">Marketing</a>
+            </div>
+            -->

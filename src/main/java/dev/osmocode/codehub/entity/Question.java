@@ -18,9 +18,10 @@ public class Question {
     @Size(max = 30_000)
     private String body;
 
-    @ManyToOne(
-            fetch = FetchType.LAZY
-    )
+//    @ManyToOne(
+//            fetch = FetchType.LAZY
+//    )
+    @ManyToOne
     @JoinTable(
             name = "question_user",
             joinColumns = @JoinColumn(name = "question_id"),
