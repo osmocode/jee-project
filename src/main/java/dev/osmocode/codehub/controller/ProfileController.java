@@ -3,6 +3,8 @@ package dev.osmocode.codehub.controller;
 import dev.osmocode.codehub.dto.UserProfileDto;
 import dev.osmocode.codehub.dto.UserSummaryDto;
 import dev.osmocode.codehub.service.*;
+import dev.osmocode.codehub.utils.algorithm.UserOrientedGraph;
+import dev.osmocode.codehub.utils.algorithm.UserVertex;
 import dev.osmocode.codehub.utils.validator.pagination.PaginationValidator;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -25,18 +27,20 @@ public class ProfileController {
     private final ProfilesService profilesService;
     private final PaginationValidator paginationValidator;
     private final UserProfileService userProfileService;
+    private final UserOrientedGraph graph;
 
     public ProfileController(
             UserScoreService userScoreService,
             UserFollowService userFollowService,
             ProfilesService profilesService,
             PaginationValidator paginationValidator,
-            UserProfileService userProfileService) {
+            UserProfileService userProfileService, UserOrientedGraph graph) {
         this.userScoreService = userScoreService;
         this.userFollowService = userFollowService;
         this.profilesService = profilesService;
         this.paginationValidator = paginationValidator;
         this.userProfileService = userProfileService;
+        this.graph = graph;
     }
 
     @GetMapping("/profiles")
@@ -121,7 +125,9 @@ public class ProfileController {
             return generateError(username,
                     "User not authenticated can't follow another user");
         }
-        userFollowService.performUserFollow(authentication.getName(), username);
+        if(userFollowService.performUserFollow(authentication.getName(), username)) {
+            graph.addArc(new UserVertex(authentication.getName()), new UserVertex(username));
+        }
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("redirect:/profile/" + username);
         return modelAndView;
@@ -136,7 +142,9 @@ public class ProfileController {
             return generateError(username,
                     "User not authenticated can't unfollow another user");
         }
-        userFollowService.performUserUnfollow(authentication.getName(), username);
+        if (userFollowService.performUserUnfollow(authentication.getName(), username)) {
+            graph.removeArc(new UserVertex(authentication.getName()), new UserVertex(username));
+        }
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("redirect:/profile/" + username);
         return modelAndView;
@@ -161,6 +169,7 @@ public class ProfileController {
                     "Can't follow yourself");
         }
         userScoreService.performUserScore(authentication.getName(), username, note);
+        graph.updateScoreArc(new UserVertex(authentication.getName()), new UserVertex(username), note);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("redirect:/profile/" + username);
         return modelAndView;
@@ -177,6 +186,7 @@ public class ProfileController {
                     "User not authenticated can't delete note");
         }
         userScoreService.performUserDeleteScore(authentication.getName(), username);
+        graph.updateScoreArc(new UserVertex(authentication.getName()), new UserVertex(username), 0);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("redirect:/profile/" + username);
         return modelAndView;
