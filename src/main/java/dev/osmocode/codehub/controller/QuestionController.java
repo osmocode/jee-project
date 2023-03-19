@@ -1,12 +1,16 @@
 package dev.osmocode.codehub.controller;
 
+import dev.osmocode.codehub.dto.QuestionAnswerDto;
+import dev.osmocode.codehub.repository.UserRepository;
+import dev.osmocode.codehub.service.QuestionAnswerService;
 import dev.osmocode.codehub.service.QuestionService;
 import dev.osmocode.codehub.service.QuestionTagService;
 import dev.osmocode.codehub.utils.validator.pagination.PaginationValidator;
+import jakarta.validation.Valid;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Optional;
@@ -18,14 +22,20 @@ public class QuestionController {
     private final QuestionService questionService;
     private final QuestionTagService questionTagService;
 
+    private final QuestionAnswerService questionAnswerService;
+    private final UserRepository userRepository;
+
     public QuestionController(
             PaginationValidator paginationValidator,
             QuestionService questionService,
-            QuestionTagService questionTagService
-    ) {
+            QuestionTagService questionTagService,
+            QuestionAnswerService questionAnswerService,
+            UserRepository userRepository) {
         this.paginationValidator = paginationValidator;
         this.questionService = questionService;
         this.questionTagService = questionTagService;
+        this.questionAnswerService = questionAnswerService;
+        this.userRepository = userRepository;
     }
 
     @GetMapping("/question")
@@ -47,7 +57,25 @@ public class QuestionController {
     public ModelAndView getQuestion(@PathVariable long id) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("question");
-        modelAndView.addObject("question", questionService.findQuestionById(id).orElse(null));
+        modelAndView.addObject("question", questionService.findQuestionById(id));
+        modelAndView.addObject("answers", questionAnswerService.findAnswersById(id));
+        return modelAndView;
+    }
+
+    @PostMapping("/question/{id}")
+    public ModelAndView postQuestionAnswer(
+            Authentication authentication,
+            @PathVariable long id,
+            @Valid @ModelAttribute("questionAnswerDto") QuestionAnswerDto questionAnswerDto,
+            BindingResult bindingResult)
+    {
+        ModelAndView modelAndView = new ModelAndView();
+        if (bindingResult.hasErrors()) {
+            modelAndView.setViewName("error");
+            return modelAndView;
+        }
+        questionAnswerService.performAnswerQuestion(questionAnswerDto, authentication.getName(), id);
+        modelAndView.setViewName("redirect:/question/" + id);
         return modelAndView;
     }
 

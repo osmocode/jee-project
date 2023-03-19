@@ -38,8 +38,11 @@ public class Question {
     )
     private Set<QuestionTag> tags;
 
-//    @OneToMany
-//    Set<Answer> answers;
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "question"
+    )
+    private Set<QuestionAnswer> answers;
 
 //    @OneToMany
 //    Set<QuestionComment> comments;

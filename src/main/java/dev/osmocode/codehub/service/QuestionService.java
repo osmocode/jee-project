@@ -56,8 +56,9 @@ public class QuestionService {
     }
 
     @Transactional
-    public Optional<Question> findQuestionById(long id) {
-        return repository.findById(id);
+    public Question findQuestionById(long id) {
+        var optionalQuestion = repository.findById(id);
+        return optionalQuestion.orElse(null);
     }
 
     @Transactional
