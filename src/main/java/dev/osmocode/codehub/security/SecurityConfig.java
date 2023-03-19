@@ -29,6 +29,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(requests -> {
                     // PUBLIC ROUTE
                     requests.requestMatchers(
+                            "/question/ask"
+                    ).authenticated();
+                    requests.requestMatchers(
                             "/",
                             "/index",
                             "/error",
@@ -40,7 +43,8 @@ public class SecurityConfig {
                             "/profile/**",
                             "/register",
                             "/profiles",
-                            "/tags**"
+                            "/tags**",
+                            "/question/**"
                             ).permitAll();
                     // ADMIN ROUTE
                     requests.requestMatchers(

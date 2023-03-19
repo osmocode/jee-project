@@ -4,9 +4,9 @@
     <body class="h-full">
         <aside th:replace="~{fragments/sidebar :: sidebar('Users')}"></aside>
         <div class="flex flex-1 flex-col lg:pl-64">
-            <nav th:replace="~{fragments/nav :: nav}"></nav>
+            <nav th:replace="~{fragments/nav :: nav('')}"></nav>
 
-            <div class="py-24 sm:py-32">
+            <main class="py-12 sm:py-24">
                 <div class="mx-auto max-w-7xl px-6 lg:px-8">
                     <div class="mx-auto max-w-2xl lg:mx-0">
                         <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Member</h2>
@@ -22,11 +22,12 @@
                                th:href="@{/profile/{username} (username=${user.username()})}"
                             >Open profile &rarr;</a>
                         </li>
+
                     </ul>
                 </div>
                 <div th:replace="~{fragments/pagination :: pagination('/profiles', ${profilesPage.number}, ${profilesPage.totalPages}, ${profilesPage.size})}">
                 </div>
-            </div>
+            </main>
         </div>
     </body>
 </html>

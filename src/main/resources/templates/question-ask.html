@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en"
+      class="h-full"
+      xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{fragments/head :: head}"></head>
+
+    <body class="h-full">
+        <aside th:replace="~{fragments/sidebar :: sidebar('Questions')}"></aside>
+        <div class="flex flex-1 flex-col lg:pl-64">
+            <nav th:replace="~{fragments/nav :: nav('')}"></nav>
+            <main class="flex-1">
+                <form class="space-y-8 divide-y divide-gray-200 px-8 py-12" method="POST" th:action="@{/question/ask}" th:object="${questionAskedDto}">
+                    <div class="space-y-8 divide-y divide-gray-200 sm:space-y-5">
+                        <div class="space-y-6 sm:space-y-5">
+                            <div>
+                                <h1 class="text-xl font-semibold leading-6 text-gray-900">Ask public question</h1>
+                                <p class="mt-1 max-w-2xl text-sm text-gray-500">Care about don't share personal information</p>
+                            </div>
+
+                            <div class="space-y-6 sm:space-y-5">
+
+                                <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
+                                    <label for="title" class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">Title</label>
+                                    <div class="mt-2 sm:col-span-2 sm:mt-0">
+                                        <p class="text-sm text-gray-500">Be specific and imagine you’re asking a question to another person.</p>
+                                        <input type="text" name="title" id="title" class="mt-2 block w-full max-w-lg rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+                                    </div>
+                                </div>
+
+                                <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
+                                    <label for="body" class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">What are the details of your problem?</label>
+                                    <div class="mt-2 sm:col-span-2 sm:mt-0">
+                                        <p class="mb-2 text-sm text-gray-500">Introduce the problem and expand on what you put in the title. Minimum 20 characters.</p>
+                                        <textarea id="body" name="body"></textarea>
+                                        <script>
+                                            var simplemde = new SimpleMDE({
+                                                hideIcons: ["guide", "fullscreen", "side-by-side", "preview"],
+                                                element: document.getElementById("body")
+                                            });
+                                        </script>
+                                    </div>
+                                </div>
+
+                                <!--
+                                <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
+                                    <label for="tag" class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">Tags</label>
+                                    <div class="mt-2 sm:col-span-2 sm:mt-0">
+                                        <select id="tag" name="tag" class="block w-full max-w-lg rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+                                            <option>java</option>
+                                            <option>javascript</option>
+                                            <option>c++</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                -->
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-5">
+                        <div class="flex justify-end gap-x-3">
+                            <button type="button" class="rounded-md bg-white py-2 px-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Cancel</button>
+                            <button type="submit" class="inline-flex justify-center rounded-md bg-sky-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600">Save</button>
+                        </div>
+                    </div>
+                </form>
+            </main>
+        </div>
+    </body>
+</html>

@@ -3,27 +3,28 @@
       class="h-full"
       xmlns:th="http://www.thymeleaf.org">
     <head th:replace="~{fragments/head :: head}"></head>
-    <!-- https://discuss.hotwired.dev/t/turbo-always-reloading-when-asset-js-css-is-added-with-turbo-track/3179 -->
 
     <body class="h-full">
         <aside th:replace="~{fragments/sidebar :: sidebar('Feed')}"></aside>
         <div class="flex flex-1 flex-col lg:pl-64">
-            <nav th:replace="~{fragments/nav :: nav}"></nav>
+            <nav th:replace="~{fragments/nav :: nav('')}"></nav>
             <main class="flex-1">
-
-                <article id="content" class="prose p-4 max-w-none"></article>
-                <script th:inline="javascript">
-                    /*<![CDATA[*/
-
-                    var content = /*[[${demo}]]*/ 'default';
-                    console.log(content);
-                    document.getElementById('content').innerHTML =
-                        marked.parse(content);
-
-                    /*]]>*/
-                </script>
 
             </main>
         </div>
     </body>
 </html>
+
+<!--
+<article id="content" class="prose p-4 max-w-none"></article>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    var content = /*[[${demo}]]*/ 'default';
+    console.log(content);
+    document.getElementById('content').innerHTML =
+        marked.parse(content);
+
+    /*]]>*/
+</script>
+-->

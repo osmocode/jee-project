@@ -1,40 +1,31 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<html lang="en"
+      class="h-full"
+      xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+    <head th:replace="~{fragments/head :: head}"></head>
+    <body class="h-full">
+        <aside th:replace="~{fragments/sidebar :: sidebar('Tags')}"></aside>
+        <div class="flex flex-1 flex-col lg:pl-64">
+            <nav th:replace="~{fragments/nav :: nav('tags')}"></nav>
+            <main class="py-12 sm:py-24">
+                <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                    <div class="mx-auto max-w-2xl lg:mx-0">
+                        <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                            Tags
+                            <span th:if="${!#strings.isEmpty(search)}" th:text="'for search: ' + ${search}">Search</span>
+                        </h2>
+                        <p class="mt-6 text-lg leading-8 text-gray-600">A tag is a keyword or label that categorizes your question with other, similar questions. Using the right tags makes it easier for others to find and answer your question.</p>
+                    </div>
 
-<ul th:each="tag : ${tagsPage}">
-    <li th:text="${tag.getId()}  + ' ' + ${tag.getName()}"></li>
-</ul>
-
-<p>PAGINATION</p>
-
-<nav>
-    <ul>
-        <li th:if="${tagsPage.number != 0}">
-            <a th:href="@{/tags?search={search}&offset={offset}&limit={limit}(search=${search}, offset=${tagsPage.number - 1}, limit=${tagsPage.size})}">Précédent</a>
-        </li>
-        <li th:each="pageNumber : ${#numbers.sequence(0, tagsPage.totalPages - 1)}"
-            th:classappend="${tagsPage.number == pageNumber} ? active">
-            <a th:href="@{/tags?search={search}&offset={offset}&limit={limit}(search=${search}, offset=${pageNumber}, limit=${tagsPage.size})}"
-               th:text="${pageNumber + 1}"></a>
-        </li>
-        <li th:if="${tagsPage.number != tagsPage.totalPages - 1}">
-            <a th:href="@{/tags?search={search}&offset={offset}&limit={limit}(search=${search}, offset=${tagsPage.number + 1}, limit=${tagsPage.size})}">Suivant</a>
-        </li>
-    </ul>
-    <div>
-        <a th:href="@{/tags?search={search}&offset={offset}&limit={limit}(search=${search}, offset=0, limit=15)}"
-           th:classappend="${tagsPage.size==15} ? active">15</a>
-        <a th:href="@{/tags?search={search}&offset={offset}&limit={limit}(search=${search}, offset=0, limit=30)}"
-           th:classappend="${tagsPage.size==30} ? active">30</a>
-        <a th:href="@{/tags?search={search}&offset={offset}&limit={limit}(search=${search}, offset=0, limit=50)}"
-           th:classappend="${tagsPage.size==50} ? active">50</a>
-        per page
-    </div>
-</nav>
-</body>
+                    <div class="mx-auto mt-20 grid max-w-2xl grid-cols-1 gap-y-4 gap-x-4 text-start sm:grid-cols-2 md:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-4">
+                        <article class="flex max-w-xl flex-col items-start justify-between px-6 py-5 rounded-lg border border-gray-300 bg-white shadow-sm focus-within:ring-2 focus-within:ring-sky-500 focus-within:ring-offset-2 hover:border-gray-400"
+                            th:each="tag: ${tagsPage}">
+                            <span class="inline-flex items-center rounded-md bg-blue-100 px-2.5 py-0.5 text-sm font-medium text-blue-800" th:text="${tag.getName()}">Tag</span>
+                            <p class="mt-2 text-xs leading-relaxed text-gray-600 line-clamp-1 text-justify">Illo sint voluptas. Error voluptates culpa eligendi. Hic vel totam vitae illo. Non aliquid explicabo necessitatibus unde. Sed exercitationem placeat consectetur nulla deserunt vel. Iusto corrupti dicta.</p>
+                        </article>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </body>
 </html>

@@ -34,7 +34,7 @@ public class QuestionAskController {
     public String getQuestionAsk(Model model) {
         model.addAttribute("questionAskedDto", new QuestionAskedDto());
         model.addAttribute("questionTags", questionTagService.getAll().stream().limit(10));
-        return "ask-question";
+        return "question-ask";
     }
 
     @PostMapping
@@ -46,7 +46,7 @@ public class QuestionAskController {
     ) {
         ModelAndView modelAndView = new ModelAndView();
         if (bindingResult.hasErrors() || (selectedTags != null && selectedTags.size() > 5)) {
-            modelAndView.setViewName("ask-question");
+            modelAndView.setViewName("question-ask");
             modelAndView.addObject("questionAskedDto", questionAskedDto);
             return modelAndView;
         }
