@@ -85,6 +85,7 @@ public class ProfileController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("followers");
         modelAndView.addObject("followersPage", followersPage);
+        modelAndView.addObject("currentProfileName",username);
         return modelAndView;
     }
 
@@ -107,6 +108,7 @@ public class ProfileController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("followings");
         modelAndView.addObject("followingsPage", followingsPage);
+        modelAndView.addObject("currentProfileName",username);
         return modelAndView;
     }
 
@@ -140,8 +142,8 @@ public class ProfileController {
         return modelAndView;
     }
 
-    @PostMapping("/profile/{username}/score")
-    public ModelAndView postScore(
+    @PostMapping("/profile/{username}/note")
+    public ModelAndView postNote(
             Authentication authentication,
             @PathVariable String username,
             @RequestParam(name = "note") int note
@@ -158,7 +160,7 @@ public class ProfileController {
             return generateError(username,
                     "Can't follow yourself");
         }
-        userScoreService.performUserAddScore(authentication.getName(), username, note);
+        userScoreService.performUserScore(authentication.getName(), username, note);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("redirect:/profile/" + username);
         return modelAndView;
@@ -175,26 +177,6 @@ public class ProfileController {
                     "User not authenticated can't delete note");
         }
         userScoreService.performUserDeleteScore(authentication.getName(), username);
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("redirect:/profile/" + username);
-        return modelAndView;
-    }
-
-    @PostMapping("/profile/{username}/update-score")
-    public ModelAndView postUpdateScore(
-            Authentication authentication,
-            @PathVariable String username,
-            @RequestParam(name = "note") int note
-    ) {
-        if (null == authentication) {
-            return generateError(username,
-                    "User not authenticated can't update note");
-        }
-        if (note < 1 || note > 5) {
-            return generateError(username,
-                    "Note should be between 1 and 5");
-        }
-        userScoreService.performUserUpdateScore(authentication.getName(), username, note);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("redirect:/profile/" + username);
         return modelAndView;

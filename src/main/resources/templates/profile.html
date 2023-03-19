@@ -26,7 +26,16 @@
 <html lang="en"
       class="h-full"
       xmlns:th="http://www.thymeleaf.org">
-    <head th:replace="~{fragments/head :: head}"></head>
+    <head th:replace="~{fragments/head :: head}">
+        <style>
+            /* Définir une classe CSS */
+            .ma-classe {
+                color: red;
+                font-size: 16px;
+            }
+        </style>
+
+    </head>
     <body class="h-full">
         <aside th:replace="~{fragments/sidebar :: sidebar('Users')}"></aside>
         <div class="flex flex-1 flex-col lg:pl-64">
@@ -41,13 +50,75 @@
                         </div>
                         <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
                             <div class="-mt-12 sm:-mt-16 sm:flex sm:items-end sm:space-x-5">
-                                <div class="flex">
+                                <div class="flex py-4">
                                     <svg class="h-24 w-24 rounded-full ring-4 ring-white sm:h-32 sm:w-32 bg-gray-200" th:data-jdenticon-value="${userDto.username()}"></svg>
                                 </div>
                                 <div class="mt-6 sm:flex sm:min-w-0 sm:flex-1 sm:items-center sm:justify-end sm:space-x-6 sm:pb-1">
                                     <div class="mt-6 min-w-0 flex-1 sm:hidden md:block">
                                         <h1 class="truncate text-2xl font-bold text-gray-900" th:text="${userDto.username()}">Username</h1>
+                                        <div class="flex items-center py-2">
+                                            <!-- Active: "text-yellow-400", Default: "text-gray-300" -->
+                                            <svg  th:classappend="${(userDto.grade() >=  1)} ? 'text-yellow-400' : 'text-gray-300'"
+                                                    class="h-5 w-5 flex-shrink-0 " viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd" />
+                                            </svg>
+                                            <svg th:classappend="${(userDto.grade() >=  2)} ? 'text-yellow-400' : 'text-gray-300'"
+                                                    class="h-5 w-5 flex-shrink-0 " viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd" />
+                                            </svg>
+                                            <svg th:classappend="${(userDto.grade() >=  3)} ? 'text-yellow-400' : 'text-gray-300'"
+                                                    class="h-5 w-5 flex-shrink-0 " viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd" />
+                                            </svg>
+                                            <svg th:classappend="${(userDto.grade() >=  4)} ? 'text-yellow-400' : 'text-gray-300'"
+                                                    class="h-5 w-5 flex-shrink-0 " viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd" />
+                                            </svg>
+                                            <svg th:classappend="${(userDto.grade() >=  4.7)} ? 'text-yellow-400' : 'text-gray-300'"
+                                                    class="h-5 w-5 flex-shrink-0 " viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd" />
+                                            </svg>
+
+                                        </div>
+
                                     </div>
+                                    <!-- DELETE NOTE-->
+                                    <form method="post" th:action="@{/profile/{username}/delete-score (username=${userDto.username()})}">
+                                        <div class="justify-stretch mt-6 flex flex-col space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
+                                            <button name="note" value="1" type="submit" class="inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                                                <span class="sr-only">Enter</span>
+                                                <svg class="h-5 w-5 flex-shrink-0 text-gray-300" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                    <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </form>
+                                    <form method="post" th:action="@{/profile/{username}/note (username=${userDto.username()})}">
+                                        <div class="justify-stretch mt-6 flex flex-col space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
+
+                                            <!--SELECTED LISTE-->
+                                            <label for="note" class="sr-only">Note</label>
+                                            <select id="note" name="note" class="max-w-full rounded-md border border-gray-300 py-1.5 text-left text-base font-medium leading-5 text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
+
+                                                <option th:selected="${userDto.grade() >= 1 and userDto.grade() < 2}" value="1">1</option>
+                                                <option th:selected="${userDto.grade() >= 2 and userDto.grade() < 3}" value="2">2</option>
+                                                <option th:selected="${userDto.grade() >= 3 and userDto.grade() < 4}" value="3">3</option>
+                                                <option th:selected="${userDto.grade() >= 4 and userDto.grade() < 5}" value="4">4</option>
+                                                <option th:selected="${userDto.grade() >= 5}" value="5">5</option>
+                                            </select>
+
+                                            <div class="justify-stretch mt-6 flex flex-col space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
+                                                <button name="note" value="1" type="submit" class="inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                                                    <span class="sr-only">Enter</span>
+                                                    <svg class="h-5 w-5 flex-shrink-0 text-yellow-400 " viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                        <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+
+
                                     <form method="post" th:action="@{/profile/{username}/unfollow (username=${userDto.username()})}">
                                         <div class="justify-stretch mt-6 flex flex-col space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
                                             <button type="submit" class="inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
@@ -135,6 +206,63 @@
                             </div>
                         </div>
                     </div>
+                    <div class="pb-6 rounded-xl shadow mt-12 py-4 px-8">
+                        <div class="border-b border-gray-200">
+                            <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                                <!-- Current: "border-indigo-500 text-indigo-600", Default: "border-transparent text-gray-500 hover:border-gray-200 hover:text-gray-700" -->
+                                <a data-target="#tab-overview"
+                                   class="tab border-indigo-500 text-indigo-600 flex whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium is-active">
+                                    Overview
+                                </a>
+
+                                <a data-target="#tab-followers"
+                                   class="tab border-transparent text-gray-500 hover:border-gray-200 hover:text-gray-700 flex whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium">
+                                    Followers
+                                    <span class="bg-gray-100 text-gray-900 ml-3 hidden rounded-full py-0.5 px-2.5 text-xs font-medium md:inline-block">6</span>
+                                </a>
+
+                                <a data-target="#tab-following"
+                                   class="tab border-transparent text-gray-500 hover:border-gray-200 hover:text-gray-700 flex whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium">
+                                    Following
+                                    <span class="bg-gray-100 text-gray-900 ml-3 hidden rounded-full py-0.5 px-2.5 text-xs font-medium md:inline-block">4</span>
+                                </a>
+                            </nav>
+                        </div>
+
+                        <div class="tab-content">
+                            <div class="tab-panel flex bg-gray-100 is-active" id="tab-overview">
+                                <h1>Overview</h1>
+                            </div>
+
+                            <div class="tab-panel flex bg-gray-100" id="tab-followers">
+                                <h1>Followers</h1>
+                            </div>
+
+                            <div class="tab-panel flex bg-gray-100" id="tab-following">
+                                <h1>Following</h1>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        const tabs = document.querySelectorAll('.tab');
+                        const tabContent = document.querySelectorAll('.tab-panel');
+
+                        tabs.forEach((tab) => {
+                            tab.addEventListener('click', () => {
+                                const target = document.querySelector(tab.dataset.target);
+
+                                tabContent.forEach((tc) => {
+                                    tc.classList.remove('hidden');
+                                });
+                                tabs.forEach((t) => {
+                                    t.classList.remove('hidden');
+                                });
+                                tab.classList.add('hidden');
+                                target.classList.add('hidden');
+                            });
+                        });
+                    </script>
                 </div>
             </main>
         </div>

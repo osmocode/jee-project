@@ -16,7 +16,7 @@ public class UserToolsFunction {
     }
 
     public User findByUsernameOrElseThrow(String username) {
-        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return userRepository.findUserFetchingProfile(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
     /*
@@ -29,6 +29,7 @@ public class UserToolsFunction {
         if (!actor.getFollowings().contains(target) || !target.getFollowers().contains(actor)) {
             return null;
         }
+        //ici ca ne fonctionne pas bien
         return target.getAttributedScores().stream().filter(s -> s.getAssigner().equals(actor)).findFirst().orElse(null);
     }
 }
