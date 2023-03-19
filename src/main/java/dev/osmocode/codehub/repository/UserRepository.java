@@ -24,4 +24,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u FROM users u LEFT JOIN FETCH u.followers LEFT JOIN FETCH u.followings LEFT JOIN FETCH u.attributedScores WHERE u.username=:username")
     Optional<User> findUserFetchingProfile(String username);
+
+    @Query(value = "SELECT u FROM users u WHERE u.username like %:username%",
+    countQuery = "SELECT count(u) FROM users u WHERE u.username like %:username%")
+    Page<User> findAllWithPagination(String username, Pageable pageable);
 }

@@ -46,11 +46,13 @@ public class ProfileController {
     @GetMapping("/profiles")
     public ModelAndView getProfiles(
             @RequestParam(value = "offset", required = false) Optional<Integer> optionalOffset,
-            @RequestParam(value = "limit", required = false) Optional<Integer> optionalLimit
+            @RequestParam(value = "limit", required = false) Optional<Integer> optionalLimit,
+            @RequestParam(value = "search", required = false) Optional<String> optionalSearch
+            
     ) {
         var limit = paginationValidator.sanitizeLimit(optionalLimit);
         var offset = paginationValidator.sanitizeOffset(optionalOffset);
-        Page<UserSummaryDto> profilesWithPagination = profilesService.getProfilesWithPaginationAndSort(offset, limit);
+        Page<UserSummaryDto> profilesWithPagination = profilesService.getProfilesWithPaginationAndSort(offset, limit, optionalSearch.orElse(""));
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("profiles");
         modelAndView.addObject("profilesPage", profilesWithPagination);
