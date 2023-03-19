@@ -17,6 +17,20 @@ public class UserScoreService {
     }
 
     @Transactional
+    public void performUserScore(String actorName, String targetName, int note) {
+        repository.findByAssignerUsernameAndTargetUsername(actorName, targetName).ifPresentOrElse(
+                u -> u.setNote(note),
+                () -> {
+                    User actor = userTools.findByUsernameOrElseThrow(actorName);
+                    User target = userTools.findByUsernameOrElseThrow(targetName);
+                    if (actor == target) return;
+                    if (!actor.getFollowings().contains(target) || !target.getFollowers().contains(actor)) return;
+                    repository.save(new UserScore(actor, target, note));
+                }
+        );
+    }
+
+    @Transactional
     public void performUserAddScore(String actorName, String targetName, int note) {
         User actor = userTools.findByUsernameOrElseThrow(actorName);
         User target = userTools.findByUsernameOrElseThrow(targetName);
